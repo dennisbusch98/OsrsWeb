@@ -34,6 +34,21 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage, limits: { fileSize: 8 * 1024 * 1024 } });
 
+// Logs every incoming webhook hit - even ones that fail validation or have
+// no usable content - so Render's Logs tab shows exactly what happened
+// instead of silence. Truncates the body so nothing huge/sensitive floods
+// the log.
+function logIncoming(routeName, req) {
+  const bodyPreview = req.body && Object.keys(req.body).length
+    ? JSON.stringify(req.body).slice(0, 500)
+    : '(empty body)';
+  const filesInfo = (req.files || []).map(f => `${f.fieldname}:${f.originalname}`).join(', ') || '(none)';
+  console.log(
+    `[webhook:${routeName}] hit | content-type=${req.headers['content-type'] || '?'} | ` +
+    `params=${JSON.stringify(req.params)} | files=${filesInfo} | body=${bodyPreview}`
+  );
+}
+
 const WIKI_IMG_BASE = 'https://oldschool.runescape.wiki/images/';
 
 // Best-effort: turn "Twisted bow" into a real wiki icon URL, the same way
@@ -84,13 +99,18 @@ const receiveWebhookEvent = [
   upload.any(),
   async (req, res, next) => {
     try {
+      logIncoming('event', req);
       const { characterId, secret } = req.params;
       if (!secret || secret !== process.env.WEBHOOK_SECRET) {
+        console.log(`[webhook:event] REJECTED - bad secret (got ...${(secret || '').slice(-4)})`);
         return res.status(401).json({ error: 'Ugyldig webhook secret.' });
       }
 
       const character = await Character.findByPk((characterId || '').toLowerCase());
-      if (!character) return res.status(404).json({ error: 'Ukjent karakter.' });
+      if (!character) {
+        console.log(`[webhook:event] REJECTED - unknown characterId "${characterId}"`);
+        return res.status(404).json({ error: 'Ukjent karakter.' });
+      }
 
       let content = null;
       let payloadIcon = null;
@@ -123,6 +143,7 @@ const receiveWebhookEvent = [
       }
 
       if (!content) {
+        console.log('[webhook:event] REJECTED - no usable content/payload_json/itemName/achievement field found');
         return res.status(400).json({
           error: 'Fant ingen "content", "payload_json", "itemName" eller "achievement" i forespørselen.'
         });
@@ -156,6 +177,7 @@ const receiveWebhookEvent = [
         imageUrl
       });
 
+      console.log(`[webhook:event] OK - posted as ${character.displayName}: "${content.slice(0, 100)}"`);
       res.status(201).json(post);
     } catch (err) { next(err); }
   }
@@ -194,8 +216,10 @@ const receiveChatWebhook = [
   upload.any(),
   async (req, res, next) => {
     try {
+      logIncoming('chat', req);
       const { secret } = req.params;
       if (!secret || secret !== process.env.WEBHOOK_SECRET) {
+        console.log(`[webhook:chat] REJECTED - bad secret (got ...${(secret || '').slice(-4)})`);
         return res.status(401).json({ error: 'Ugyldig webhook secret.' });
       }
 
@@ -233,6 +257,7 @@ const receiveChatWebhook = [
 
         if (!authorName) {
           if (!rawText) {
+            console.log('[webhook:chat] REJECTED - no content/payload_json/message field found in request');
             return res.status(400).json({ error: 'Fant ingen chat-melding i forespørselen.' });
           }
           const parsed = parseChatLine(rawText);
@@ -242,6 +267,7 @@ const receiveChatWebhook = [
       }
 
       const post = await createChatPost(authorName, message);
+      console.log(`[webhook:chat] OK - posted from ${authorName}: "${String(message).slice(0, 100)}"`);
       res.status(201).json(post);
     } catch (err) { next(err); }
   }

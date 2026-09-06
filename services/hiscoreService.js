@@ -41,12 +41,41 @@ async function fetchHiscores(playerName) {
   try {
     res = await axios.post(`${WOM_BASE}/players/${encodeURIComponent(playerName)}`, {}, { timeout: 10000 });
   } catch (err) {
+    // Log the REAL underlying reason to the server console - "Klarte ikke å
+    // nå Wise Old Man" alone hides whether this was a 404 (bad RSN), a 429
+    // (rate limited), a 5xx from WOM itself, or a plain network/DNS failure
+    // on this machine (e.g. no internet, firewall, corporate proxy).
+    console.error('[hiscoreService] WOM request failed for', playerName, {
+      status: err.response && err.response.status,
+      statusText: err.response && err.response.statusText,
+      data: err.response && err.response.data,
+      code: err.code, // e.g. ENOTFOUND, ECONNREFUSED, ETIMEDOUT
+      message: err.message
+    });
+
     if (err.response && err.response.status === 404) {
       const e = new Error(`Fant ingen spiller med navnet "${playerName}" (verken på Wise Old Man eller OSRS hiscores).`);
       e.status = 404;
       throw e;
     }
-    const e = new Error('Klarte ikke å nå Wise Old Man akkurat nå. Prøv igjen om litt.');
+    if (err.response && err.response.status === 429) {
+      const e = new Error('Wise Old Man rate-limitet forespørselen (for mange oppdateringer på kort tid). Prøv igjen om et minutt.');
+      e.status = 429;
+      throw e;
+    }
+    if (err.code === 'ENOTFOUND' || err.code === 'ECONNREFUSED' || err.code === 'EAI_AGAIN') {
+      const e = new Error('Denne serveren har ikke nettverkstilgang til api.wiseoldman.net akkurat nå (DNS/tilkoblingsfeil). Sjekk internettforbindelsen eller brannmur/proxy.');
+      e.status = 502;
+      throw e;
+    }
+    if (err.code === 'ECONNABORTED' || /timeout/i.test(err.message || '')) {
+      const e = new Error('Forespørselen til Wise Old Man tok for lang tid og ble avbrutt (timeout). Prøv igjen.');
+      e.status = 504;
+      throw e;
+    }
+
+    const detail = (err.response && err.response.status) ? ` (HTTP ${err.response.status})` : ` (${err.code || err.message})`;
+    const e = new Error(`Klarte ikke å nå Wise Old Man akkurat nå${detail}. Se server-loggen for detaljer.`);
     e.status = 502;
     throw e;
   }
