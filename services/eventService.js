@@ -5,7 +5,7 @@ async function getEvents() {
   return events.map(e => e.toJSON());
 }
 
-async function createEvent({ title, description, datetime, createdBy }) {
+async function createEvent({ title, description, datetime, createdBy, tag }) {
   if (!title || !title.trim()) {
     const e = new Error('Eventet trenger en tittel.');
     e.status = 400;
@@ -16,11 +16,13 @@ async function createEvent({ title, description, datetime, createdBy }) {
     e.status = 400;
     throw e;
   }
+  const cleanTag = tag ? tag.trim().toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 30) : null;
   const event = await Event.create({
     title: title.trim().slice(0, 150),
     description: (description || '').trim().slice(0, 1000),
     datetime: new Date(datetime),
-    createdBy
+    createdBy,
+    tag: cleanTag || null
   });
   return event.toJSON();
 }

@@ -39,13 +39,16 @@ function renderEvents() {
       <div class="panel event-card p-3 mb-3">
         <div class="d-flex justify-content-between align-items-start">
           <div>
-            <h5 class="mb-1">${escapeHtmlEv(ev.title)}</h5>
+            <h5 class="mb-1">${escapeHtmlEv(ev.title)} ${ev.tag ? `<span class="badge" style="background:#ffb300; color:#14171c;">-${ev.tag}-</span>` : ''}</h5>
             <div class="text-secondary" style="font-size:13px;">${new Date(ev.datetime).toLocaleString('no-NO')}</div>
           </div>
           ${isMine ? `<button class="btn btn-sm btn-outline-danger" onclick="deleteEvent('${ev.id}')">Slett</button>` : ''}
         </div>
         ${ev.description ? `<p class="mt-2 mb-2" style="white-space:pre-wrap;">${escapeHtmlEv(ev.description)}</p>` : ''}
-        <div class="countdown" data-target="${ev.datetime}">--:--:--</div>
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="countdown" data-target="${ev.datetime}">--:--:--</div>
+          ${ev.tag ? `<button class="btn btn-sm btn-outline-light" onclick="openEventChat('${ev.tag}', ${JSON.stringify(ev.title).replace(/"/g, '&quot;')})">💬 Se chat</button>` : ''}
+        </div>
       </div>
     `;
   }).join('');
@@ -93,7 +96,8 @@ document.getElementById('eventForm').addEventListener('submit', async (e) => {
     const title = document.getElementById('eventTitle').value;
     const description = document.getElementById('eventDescription').value;
     const datetime = document.getElementById('eventDatetime').value;
-    await Api.post('/api/events', { title, description, datetime });
+    const tag = document.getElementById('eventTag').value;
+    await Api.post('/api/events', { title, description, datetime, tag });
     hideEventForm();
     loadEvents();
   } catch (err) {
@@ -101,6 +105,47 @@ document.getElementById('eventForm').addEventListener('submit', async (e) => {
     errorBox.classList.remove('d-none');
   }
 });
+
+// ===== Event chat modal =====
+let ACTIVE_EVENT_TAG = null;
+let eventChatModalInstance = null;
+
+function escapeHtmlChatEv(str) {
+  const div = document.createElement('div');
+  div.innerText = str;
+  return div.innerHTML;
+}
+
+function openEventChat(tag, title) {
+  ACTIVE_EVENT_TAG = tag;
+  document.getElementById('eventChatModalTitle').textContent = `💬 Chat - ${title} (-${tag}-)`;
+  if (!eventChatModalInstance) {
+    eventChatModalInstance = new bootstrap.Modal(document.getElementById('eventChatModal'));
+  }
+  eventChatModalInstance.show();
+  loadEventChat();
+}
+
+async function loadEventChat() {
+  if (!ACTIVE_EVENT_TAG) return;
+  const log = document.getElementById('eventChatLog');
+  log.innerHTML = '<p class="text-secondary">Laster...</p>';
+  try {
+    const posts = await Api.get(`/api/posts/by-tag/${encodeURIComponent(ACTIVE_EVENT_TAG)}`);
+    if (posts.length === 0) {
+      log.innerHTML = `<p class="text-secondary">Ingen meldinger med "-${ACTIVE_EVENT_TAG}-" enda.</p>`;
+      return;
+    }
+    log.innerHTML = posts.map(p => `
+      <div class="chat-line">
+        <b>${escapeHtmlChatEv(p.authorName)}:</b> ${escapeHtmlChatEv(p.content)}
+      </div>
+    `).join('');
+    log.scrollTop = log.scrollHeight;
+  } catch (err) {
+    log.innerHTML = `<div class="alert alert-danger">${err.message}</div>`;
+  }
+}
 
 async function deleteEvent(id) {
   if (!confirm('Slette dette eventet?')) return;

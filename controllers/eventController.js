@@ -12,7 +12,8 @@ async function createEvent(req, res, next) {
       title: req.body.title,
       description: req.body.description,
       datetime: req.body.datetime,
-      createdBy: req.user.userId
+      createdBy: req.user.userId,
+      tag: req.body.tag
     });
     res.status(201).json(event);
   } catch (err) { next(err); }

@@ -23,6 +23,12 @@ const Event = sequelize.define('Event', {
     type: DataTypes.UUID,
     allowNull: false,
     field: 'created_by'
+  },
+  tag: {
+    // Optional short tag (e.g. "toa") - chat messages containing "-toa-"
+    // get linked to this event and shown in its chat modal.
+    type: DataTypes.STRING(30),
+    allowNull: true
   }
 }, {
   tableName: 'events'

@@ -54,4 +54,21 @@ async function deletePost(postId, userId) {
   return { ok: true };
 }
 
-module.exports = { getFeed, createPost, deletePost, findRecentDuplicate };
+
+// Chat messages tagged for a specific event, e.g. content containing "-toa-"
+// for a tag of "toa". Case-insensitive substring match.
+async function findChatByTag(tag) {
+  const { Op } = require('sequelize');
+  const pattern = `%-${tag.toLowerCase()}-%`;
+  const posts = await Post.findAll({
+    where: {
+      type: 'chat',
+      content: { [Op.like]: pattern }
+    },
+    order: [['createdAt', 'ASC']],
+    limit: 500
+  });
+  return posts.map(p => p.toJSON());
+}
+
+module.exports = { getFeed, createPost, deletePost, findRecentDuplicate, findChatByTag };

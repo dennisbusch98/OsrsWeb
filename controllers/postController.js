@@ -28,4 +28,10 @@ async function deletePost(req, res, next) {
   } catch (err) { next(err); }
 }
 
-module.exports = { getFeed, createPost, deletePost };
+async function getByTag(req, res, next) {
+  try {
+    res.json(await postService.findChatByTag(req.params.tag));
+  } catch (err) { next(err); }
+}
+
+module.exports = { getFeed, createPost, deletePost, getByTag };
