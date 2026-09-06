@@ -18,7 +18,10 @@ async function loadFeed() {
   const feedEl = document.getElementById('feed');
   feedEl.innerHTML = '<p class="text-secondary">Laster feed...</p>';
   try {
-    const posts = await Api.get('/api/posts');
+    const allPosts = await Api.get('/api/posts');
+    // Clan chat has its own dedicated page - keep the home feed for
+    // posts/loot/achievements only, so it doesn't get flooded with chat spam.
+    const posts = allPosts.filter(p => p.type !== 'chat');
     const me = Api.getUser();
     if (posts.length === 0) {
       feedEl.innerHTML = '<p class="text-secondary">Ingen innlegg enda. Bli den første til å poste noe!</p>';

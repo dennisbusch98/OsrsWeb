@@ -3,7 +3,7 @@ const { User } = require('../models');
 
 async function getFeed(req, res, next) {
   try {
-    res.json(await postService.getFeed());
+    res.json(await postService.getFeed(req.query.type));
   } catch (err) { next(err); }
 }
 

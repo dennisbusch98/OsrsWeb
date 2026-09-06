@@ -1,8 +1,24 @@
 const { Post } = require('../models');
 
-async function getFeed() {
-  const posts = await Post.findAll({ order: [['createdAt', 'DESC']], limit: 200 });
+async function getFeed(type) {
+  const where = type ? { type } : {};
+  const posts = await Post.findAll({ where, order: [['createdAt', 'DESC']], limit: 200 });
   return posts.map(p => p.toJSON());
+}
+
+// Used by the chat webhook to avoid showing the same clan chat line
+// multiple times when several members all have the plugin forwarding it.
+async function findRecentDuplicate({ authorName, content, type, withinSeconds = 15 }) {
+  const since = new Date(Date.now() - withinSeconds * 1000);
+  const { Op } = require('sequelize');
+  return Post.findOne({
+    where: {
+      type,
+      authorName,
+      content,
+      createdAt: { [Op.gte]: since }
+    }
+  });
 }
 
 async function createPost({ authorId, authorName, characterId, content, imageUrl, type }) {
@@ -38,4 +54,4 @@ async function deletePost(postId, userId) {
   return { ok: true };
 }
 
-module.exports = { getFeed, createPost, deletePost };
+module.exports = { getFeed, createPost, deletePost, findRecentDuplicate };

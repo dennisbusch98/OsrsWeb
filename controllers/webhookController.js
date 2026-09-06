@@ -161,4 +161,84 @@ const receiveWebhookEvent = [
   }
 ];
 
-module.exports = { receiveWebhookEvent };
+
+// Clan Chat webhook (e.g. the "Clan Chat Webhook" RuneLite plugin). This is
+// NOT tied to one character - clan chat is shared, and the sender's name is
+// already inside the message text itself. Because several members can all
+// have the plugin forwarding the SAME clan chat line at once, this
+// de-duplicates: if an identical (sender, message) pair arrived in the last
+// 15 seconds, it's silently dropped instead of creating a second post.
+//
+//   POST /api/webhook/chat/:secret
+
+function parseChatLine(raw) {
+  // Common formats: "**PlayerName**: message", "PlayerName: message"
+  const cleaned = raw.replace(/\*\*/g, '').trim();
+  const m = cleaned.match(/^([^:]{1,40}):\s*(.+)$/s);
+  if (m) return { authorName: m[1].trim(), message: m[2].trim() };
+  return { authorName: 'Clan Chat', message: cleaned };
+}
+
+const receiveChatWebhook = [
+  upload.any(),
+  async (req, res, next) => {
+    try {
+      const { secret } = req.params;
+      if (!secret || secret !== process.env.WEBHOOK_SECRET) {
+        return res.status(401).json({ error: 'Ugyldig webhook secret.' });
+      }
+
+      let rawText = null;
+      if (req.body && req.body.payload_json) {
+        try {
+          const payload = JSON.parse(req.body.payload_json);
+          rawText = payload.content ||
+            (payload.embeds && payload.embeds[0] && (payload.embeds[0].description ||
+              (payload.embeds[0].author && payload.embeds[0].author.name && payload.embeds[0].description) ||
+              payload.embeds[0].title)) ||
+            null;
+          // Some clan-chat plugins put the sender in embed.author.name and
+          // the message in embed.description - prefer that split if present.
+          if (payload.embeds && payload.embeds[0] && payload.embeds[0].author && payload.embeds[0].author.name && payload.embeds[0].description) {
+            const post = await createChatPost(payload.embeds[0].author.name, payload.embeds[0].description);
+            return res.status(201).json(post);
+          }
+        } catch (e) { /* fall through */ }
+      }
+      if (!rawText && req.body && req.body.content) rawText = req.body.content;
+      if (!rawText && req.body && req.body.message) rawText = req.body.message;
+
+      if (!rawText) {
+        return res.status(400).json({ error: 'Fant ingen chat-melding i forespørselen.' });
+      }
+
+      const { authorName, message } = parseChatLine(rawText);
+      const post = await createChatPost(authorName, message);
+      res.status(201).json(post);
+    } catch (err) { next(err); }
+  }
+];
+
+async function createChatPost(authorName, message) {
+  const trimmedAuthor = String(authorName).slice(0, 50);
+  const trimmedMessage = String(message).slice(0, 2000);
+
+  const dup = await postService.findRecentDuplicate({
+    authorName: trimmedAuthor,
+    content: trimmedMessage,
+    type: 'chat',
+    withinSeconds: 15
+  });
+  if (dup) return dup.toJSON ? dup.toJSON() : dup;
+
+  return postService.createPost({
+    authorId: null,
+    authorName: trimmedAuthor,
+    characterId: null,
+    type: 'chat',
+    content: trimmedMessage,
+    imageUrl: null
+  });
+}
+
+module.exports = { receiveWebhookEvent, receiveChatWebhook };

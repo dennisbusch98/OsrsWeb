@@ -31,6 +31,21 @@
     <div id="copyConfirm" class="text-success" style="font-size:12px; display:none;">✔ Kopiert!</div>
   </div>
 
+  <div class="panel p-3 mb-3">
+    <h6 class="text-secondary mb-2">💬 Clan Chat-webhook (delt for alle)</h6>
+    <p class="text-secondary" style="font-size:12.5px;">
+      Denne er ikke koblet til én karakter - clan chat er felles for alle,
+      så alle 5 kan lime inn nøyaktig samme URL i sin egen "Clan Chat
+      Webhook"-plugin. Meldinger havner i egen Chat-fane, med automatisk
+      duplikat-fjerning hvis flere har pluginen på samtidig.
+    </p>
+    <div class="input-group input-group-sm">
+      <input type="text" class="form-control" id="chatWebhookUrlInput" readonly>
+      <button class="btn btn-noob" onclick="copyChatWebhookUrl()">Kopiér</button>
+    </div>
+    <div id="chatCopyConfirm" class="text-success" style="font-size:12px; display:none;">✔ Kopiert!</div>
+  </div>
+
   <div class="panel p-3">
     <h6 class="text-secondary mb-2">📋 Slik setter du det opp</h6>
     <ol style="font-size:13px; line-height:1.7;">

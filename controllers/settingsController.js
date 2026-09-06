@@ -7,7 +7,8 @@ function getWebhookUrl(req, res) {
   }
   const base = `${req.protocol}://${req.get('host')}`;
   const url = `${base}/api/webhook/event/${req.user.characterId}/${secret}`;
-  res.json({ url, characterId: req.user.characterId });
+  const chatUrl = `${base}/api/webhook/chat/${secret}`;
+  res.json({ url, chatUrl, characterId: req.user.characterId });
 }
 
 module.exports = { getWebhookUrl };

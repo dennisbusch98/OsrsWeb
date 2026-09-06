@@ -16,6 +16,7 @@ function renderNavbar(activePage) {
         <div class="collapse navbar-collapse" id="navMain">
           <ul class="navbar-nav me-auto">
             ${link('/home.html', 'Hjem', 'home')}
+            ${link('/chat.html', '💬 Chat', 'chat')}
             ${link('/characters.html', 'Karakterer', 'characters')}
             ${link('/events.html', 'Events', 'events')}
             ${link('/loot-simulator.html', 'Loot Simulator', 'lootsim')}

@@ -9,9 +9,23 @@ async function loadWebhookUrl() {
     const result = await Api.get('/api/settings/webhook-url');
     document.getElementById('webhookUrlInput').value = result.url;
     document.getElementById('webhookCharName').textContent = result.characterId;
+    document.getElementById('chatWebhookUrlInput').value = result.chatUrl;
   } catch (err) {
     msg.innerHTML = `<div class="alert alert-danger py-1 px-2" style="font-size:12px;">${err.message}</div>`;
   }
+}
+
+function copyChatWebhookUrl() {
+  const input = document.getElementById('chatWebhookUrlInput');
+  input.select();
+  input.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(input.value).then(() => {
+    const confirmEl = document.getElementById('chatCopyConfirm');
+    confirmEl.style.display = 'block';
+    setTimeout(() => { confirmEl.style.display = 'none'; }, 1800);
+  }).catch(() => {
+    document.execCommand('copy');
+  });
 }
 
 function copyWebhookUrl() {
