@@ -161,9 +161,11 @@ function itemImgUrl(imgFile) {
 }
 
 function catalogForStyle(slot) {
-  const all = GEAR_CATALOG.items[slot] || [];
-  return all.filter(o => !o.style || o.style === 'all' || o.style === ACTIVE_STYLE);
+  // Every item is shown for every slot now - mixing melee/range/magic pieces
+  // in one loadout is allowed. The style tag is just an informational label.
+  return GEAR_CATALOG.items[slot] || [];
 }
+const STYLE_TAG_LABEL = { melee: '⚔️', range: '🏹', magic: '🔮', all: '✨' };
 
 function renderEquipScreen(isOwner) {
   const screen = document.getElementById('equipScreen');
@@ -189,34 +191,45 @@ function escapeAttr(str) {
     .replace(/'/g, '&#39;');
 }
 
+function renderPickerOptions(slot, searchTerm) {
+  const options = catalogForStyle(slot).filter(o =>
+    !searchTerm || o.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const currentValue = PENDING_GEAR[slot] || '';
+  const list = document.getElementById('pickerList');
+  if (!list) return;
+
+  list.innerHTML = options.map(o => `
+    <div class="gear-item-option ${o.name === currentValue ? 'selected' : ''}" data-pick-slot="${escapeAttr(slot)}" data-pick-item="${escapeAttr(o.name)}">
+      <img src="${itemImgUrl(o.img)}" onerror="this.style.opacity=0.2">
+      <span>${o.name} <span class="text-secondary" style="font-size:10.5px;">${STYLE_TAG_LABEL[o.style] || ''}</span></span>
+    </div>
+  `).join('') || '<p class="text-secondary" style="font-size:12px;">Ingen items matcher søket.</p>';
+
+  list.querySelectorAll('[data-pick-item]').forEach(el => {
+    el.addEventListener('click', () => pickItem(el.dataset.pickSlot, el.dataset.pickItem));
+  });
+}
+
 function openPicker(slot) {
   OPEN_SLOT = OPEN_SLOT === slot ? null : slot;
   const panel = document.getElementById('pickerPanel');
   if (!OPEN_SLOT) { panel.innerHTML = ''; return; }
 
-  const options = catalogForStyle(slot);
-  const currentValue = PENDING_GEAR[slot] || '';
-
   panel.innerHTML = `
     <div class="panel-2 p-2 rounded">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <b style="font-size:12.5px;">Velg ${SLOT_LABELS[slot].toLowerCase()} (${STYLE_LABELS[ACTIVE_STYLE]})</b>
+        <b style="font-size:12.5px;">Velg ${SLOT_LABELS[slot].toLowerCase()} <span class="text-secondary">(alle stiler, miks fritt)</span></b>
         <button type="button" class="btn btn-sm btn-outline-light py-0" data-clear-slot="${escapeAttr(slot)}">Tøm</button>
       </div>
-      <div class="gear-item-picker">
-        ${options.map(o => `
-          <div class="gear-item-option ${o.name === currentValue ? 'selected' : ''}" data-pick-slot="${escapeAttr(slot)}" data-pick-item="${escapeAttr(o.name)}">
-            <img src="${itemImgUrl(o.img)}" onerror="this.style.opacity=0.2">
-            <span>${o.name}</span>
-          </div>
-        `).join('') || '<p class="text-secondary" style="font-size:12px;">Ingen items registrert for denne slotten/stilen enda.</p>'}
-      </div>
+      <input type="text" class="form-control form-control-sm mb-2" id="pickerSearch" placeholder="Søk etter item...">
+      <div class="gear-item-picker" id="pickerList"></div>
     </div>
   `;
 
-  panel.querySelectorAll('[data-pick-item]').forEach(el => {
-    el.addEventListener('click', () => pickItem(el.dataset.pickSlot, el.dataset.pickItem));
-  });
+  renderPickerOptions(slot, '');
+  document.getElementById('pickerSearch').addEventListener('input', (e) => renderPickerOptions(slot, e.target.value));
+  document.getElementById('pickerSearch').focus();
   panel.querySelectorAll('[data-clear-slot]').forEach(el => {
     el.addEventListener('click', () => clearSlot(el.dataset.clearSlot));
   });

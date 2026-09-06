@@ -41,9 +41,10 @@ function switchDpsStyle(style) {
 }
 
 function dpsCatalogForStyle(slot) {
-  const all = (DPS_CATALOG.items[slot] || []);
-  return all.filter(o => !o.style || o.style === 'all' || o.style === DPS_STYLE);
+  // Every item is shown for every slot now - mixing styles is allowed.
+  return DPS_CATALOG.items[slot] || [];
 }
+const DPS_STYLE_TAG_LABEL = { melee: '⚔️', range: '🏹', magic: '🔮', all: '✨' };
 
 function renderDpsGearGrid() {
   const screen = document.getElementById('dpsEquipScreen');
@@ -67,30 +68,42 @@ function escapeAttr(str) {
     .replace(/'/g, '&#39;');
 }
 
-function openDpsPicker(slot) {
-  const options = dpsCatalogForStyle(slot);
+function renderDpsPickerOptions(slot, searchTerm) {
+  const options = dpsCatalogForStyle(slot).filter(o =>
+    !searchTerm || o.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   const currentValue = DPS_GEAR[slot] || '';
+  const list = document.getElementById('dpsPickerList');
+  if (!list) return;
+
+  list.innerHTML = options.map(o => `
+    <div class="gear-item-option ${o.name === currentValue ? 'selected' : ''}" data-pick-slot="${escapeAttr(slot)}" data-pick-item="${escapeAttr(o.name)}">
+      <img src="${IMG_BASE}${o.img}" onerror="this.style.opacity=0.2">
+      <span>${o.name} <span class="text-secondary" style="font-size:10.5px;">${DPS_STYLE_TAG_LABEL[o.style] || ''} T${o.tier ?? '?'}</span></span>
+    </div>
+  `).join('') || '<p class="text-secondary" style="font-size:12px;">Ingen items matcher søket.</p>';
+
+  list.querySelectorAll('[data-pick-item]').forEach(el => {
+    el.addEventListener('click', () => pickDpsItem(el.dataset.pickSlot, el.dataset.pickItem));
+  });
+}
+
+function openDpsPicker(slot) {
   const panel = document.getElementById('dpsPickerPanel');
   panel.innerHTML = `
     <div class="panel-2 p-2 rounded">
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <b style="font-size:12.5px;">Velg ${slot}</b>
+        <b style="font-size:12.5px;">Velg ${slot} <span class="text-secondary">(alle stiler, miks fritt)</span></b>
         <button type="button" class="btn btn-sm btn-outline-light py-0" data-clear-slot="${escapeAttr(slot)}">Tøm</button>
       </div>
-      <div class="gear-item-picker">
-        ${options.map(o => `
-          <div class="gear-item-option ${o.name === currentValue ? 'selected' : ''}" data-pick-slot="${escapeAttr(slot)}" data-pick-item="${escapeAttr(o.name)}">
-            <img src="${IMG_BASE}${o.img}" onerror="this.style.opacity=0.2">
-            <span>${o.name} <span class="text-secondary">(T${o.tier ?? '?'})</span></span>
-          </div>
-        `).join('') || '<p class="text-secondary" style="font-size:12px;">Ingen items for denne slotten/stilen.</p>'}
-      </div>
+      <input type="text" class="form-control form-control-sm mb-2" id="dpsPickerSearch" placeholder="Søk etter item...">
+      <div class="gear-item-picker" id="dpsPickerList"></div>
     </div>
   `;
 
-  panel.querySelectorAll('[data-pick-item]').forEach(el => {
-    el.addEventListener('click', () => pickDpsItem(el.dataset.pickSlot, el.dataset.pickItem));
-  });
+  renderDpsPickerOptions(slot, '');
+  document.getElementById('dpsPickerSearch').addEventListener('input', (e) => renderDpsPickerOptions(slot, e.target.value));
+  document.getElementById('dpsPickerSearch').focus();
   panel.querySelectorAll('[data-clear-slot]').forEach(el => {
     el.addEventListener('click', () => clearDpsSlot(el.dataset.clearSlot));
   });

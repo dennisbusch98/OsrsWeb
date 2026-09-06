@@ -6,5 +6,6 @@ router.use('/characters', require('./characterRoutes'));
 router.use('/posts', require('./postRoutes'));
 router.use('/events', require('./eventRoutes'));
 router.use('/webhook', require('./webhookRoutes'));
+router.use('/settings', require('./settingsRoutes'));
 
 module.exports = router;

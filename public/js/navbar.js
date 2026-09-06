@@ -19,6 +19,7 @@ function renderNavbar(activePage) {
             ${link('/characters.html', 'Karakterer', 'characters')}
             ${link('/events.html', 'Events', 'events')}
             ${link('/loot-simulator.html', 'Loot Simulator', 'lootsim')}
+            ${link('/settings.html', '⚙️ Settings', 'settings')}
           </ul>
           <div class="d-flex align-items-center gap-2">
             ${user ? `<span class="text-secondary" style="font-size:13px;">Innlogget som <b style="color:#ffb300">${user.username}</b> (${user.characterId})</span>` : ''}
