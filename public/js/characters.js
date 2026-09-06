@@ -126,11 +126,17 @@ function renderCharacterContent() {
             <h6 class="text-secondary mb-0">📊 Stats <span class="text-secondary" style="font-size:10px;">(Wise Old Man)</span></h6>
           </div>
           ${isOwner ? `
-            <div class="input-group input-group-sm mb-2">
-              <input type="text" class="form-control" id="rsnInput" placeholder="RSN (RuneScape-navn)" value="${c.rsn || c.displayName}">
-              <button class="btn btn-noob" onclick="refreshStats()">Oppdater</button>
+            <!-- Hidden on purpose: stats auto-refresh silently in the background
+                 every time you open your own character tab (see selectCharacter()).
+                 The RSN is always the character's own name - there's never a
+                 reason to type a different one, so no visible UI is needed. -->
+            <div class="d-none">
+              <div class="input-group input-group-sm mb-2">
+                <input type="text" class="form-control" id="rsnInput" value="${c.rsn || c.displayName}">
+                <button class="btn btn-noob" onclick="refreshStats()">Oppdater</button>
+              </div>
+              <div id="statsMsg"></div>
             </div>
-            <div id="statsMsg"></div>
           ` : ''}
           <div id="statsPanel"></div>
         </div>
