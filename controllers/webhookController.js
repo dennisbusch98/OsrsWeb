@@ -179,6 +179,17 @@ function parseChatLine(raw) {
   return { authorName: 'Clan Chat', message: cleaned };
 }
 
+// Dink (and some other plugins) attach a structured "extra" object with the
+// event broken down into fields, alongside the plain Discord "content" text -
+// e.g. { type: "CHAT", content: "...", extra: { type: "CLAN_CHAT", message: "...", source: "PlayerName" } }.
+// Prefer that over regex-guessing when it's present, since it's exact.
+function extractFromStructuredPayload(payload) {
+  if (payload && payload.extra && payload.extra.message && payload.extra.source) {
+    return { authorName: payload.extra.source, message: payload.extra.message };
+  }
+  return null;
+}
+
 const receiveChatWebhook = [
   upload.any(),
   async (req, res, next) => {
@@ -188,31 +199,48 @@ const receiveChatWebhook = [
         return res.status(401).json({ error: 'Ugyldig webhook secret.' });
       }
 
-      let rawText = null;
+      // The JSON payload can arrive two ways: wrapped in a "payload_json"
+      // multipart field (when a screenshot is attached), or as the raw
+      // request body itself (plain JSON POST, no attachment).
+      let payload = null;
       if (req.body && req.body.payload_json) {
-        try {
-          const payload = JSON.parse(req.body.payload_json);
+        try { payload = JSON.parse(req.body.payload_json); } catch (e) { /* ignore */ }
+      } else if (req.body && (req.body.content || req.body.extra || req.body.embeds)) {
+        payload = req.body;
+      }
+
+      let authorName = null;
+      let message = null;
+
+      const structured = payload ? extractFromStructuredPayload(payload) : null;
+      if (structured) {
+        authorName = structured.authorName;
+        message = structured.message;
+      } else {
+        let rawText = null;
+        if (payload) {
           rawText = payload.content ||
-            (payload.embeds && payload.embeds[0] && (payload.embeds[0].description ||
-              (payload.embeds[0].author && payload.embeds[0].author.name && payload.embeds[0].description) ||
-              payload.embeds[0].title)) ||
+            (payload.embeds && payload.embeds[0] && (payload.embeds[0].description || payload.embeds[0].title)) ||
             null;
           // Some clan-chat plugins put the sender in embed.author.name and
-          // the message in embed.description - prefer that split if present.
+          // the message in embed.description.
           if (payload.embeds && payload.embeds[0] && payload.embeds[0].author && payload.embeds[0].author.name && payload.embeds[0].description) {
-            const post = await createChatPost(payload.embeds[0].author.name, payload.embeds[0].description);
-            return res.status(201).json(post);
+            authorName = payload.embeds[0].author.name;
+            message = payload.embeds[0].description;
           }
-        } catch (e) { /* fall through */ }
-      }
-      if (!rawText && req.body && req.body.content) rawText = req.body.content;
-      if (!rawText && req.body && req.body.message) rawText = req.body.message;
+        }
+        if (!authorName && !rawText && req.body && req.body.message) rawText = req.body.message;
 
-      if (!rawText) {
-        return res.status(400).json({ error: 'Fant ingen chat-melding i forespørselen.' });
+        if (!authorName) {
+          if (!rawText) {
+            return res.status(400).json({ error: 'Fant ingen chat-melding i forespørselen.' });
+          }
+          const parsed = parseChatLine(rawText);
+          authorName = parsed.authorName;
+          message = parsed.message;
+        }
       }
 
-      const { authorName, message } = parseChatLine(rawText);
       const post = await createChatPost(authorName, message);
       res.status(201).json(post);
     } catch (err) { next(err); }
