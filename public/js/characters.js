@@ -66,11 +66,14 @@ async function selectCharacter(id) {
   PENDING_GEAR = { ...(ACTIVE_GEAR[ACTIVE_STYLE] || {}) };
   renderCharacterContent();
 
-  // Auto-load fresh stats when you land on your own character page,
-  // so boss counts / levels are current without needing a manual click.
-  const me = Api.getUser();
-  const isOwner = !!(me && me.characterId === ACTIVE_CHAR.id);
-  if (isOwner) {
+  // Auto-load fresh stats whenever ANYONE opens this character's tab -
+  // not just when the owner is logged in and looking at their own page.
+  // Skipped if we already have stats from the last 5 minutes, so several
+  // clan members clicking around doesn't hammer Wise Old Man with repeat
+  // requests for the same character.
+  const STALE_AFTER_MS = 5 * 60 * 1000;
+  const lastUpdated = ACTIVE_CHAR.statsUpdatedAt ? new Date(ACTIVE_CHAR.statsUpdatedAt).getTime() : 0;
+  if (Date.now() - lastUpdated > STALE_AFTER_MS) {
     refreshStats(true);
   }
 }

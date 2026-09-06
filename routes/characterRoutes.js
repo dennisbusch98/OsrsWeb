@@ -12,9 +12,13 @@ router.get('/', characterController.listCharacters);
 router.get('/:characterId', characterController.getCharacter);
 router.get('/:characterId/gear', characterController.getGear);
 
-// Only the owning, logged-in player may change their own gear or pull new stats.
+// Gear can only be changed by the owning player. Stats refresh, however, is
+// opened up to any logged-in clan member - it's just re-pulling public
+// hiscore data for display, so anyone viewing a character's tab should be
+// able to trigger (or benefit from an auto-trigger of) a refresh, not just
+// that character's own account holder.
 // :style is one of melee | range | magic - each character has 3 independent loadouts.
 router.put('/:characterId/gear/:style', requireAuth, requireOwnCharacter, characterController.updateGear);
-router.post('/:characterId/stats/refresh', requireAuth, requireOwnCharacter, characterController.refreshStats);
+router.post('/:characterId/stats/refresh', requireAuth, characterController.refreshStats);
 
 module.exports = router;
