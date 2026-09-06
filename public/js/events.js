@@ -47,7 +47,7 @@ function renderEvents() {
         ${ev.description ? `<p class="mt-2 mb-2" style="white-space:pre-wrap;">${escapeHtmlEv(ev.description)}</p>` : ''}
         <div class="d-flex justify-content-between align-items-center">
           <div class="countdown" data-target="${ev.datetime}">--:--:--</div>
-          ${ev.tag ? `<button class="btn btn-sm btn-outline-light" onclick="openEventChat('${ev.tag}', ${JSON.stringify(ev.title).replace(/"/g, '&quot;')})">💬 Se chat</button>` : ''}
+          ${ev.tag ? `<button class="btn btn-sm btn-outline-light" onclick="openEventChat('${ev.tag}', ${JSON.stringify(ev.title).replace(/"/g, '&quot;')}, '${ev.createdAt}')">💬 Se chat</button>` : ''}
         </div>
       </div>
     `;
@@ -108,6 +108,7 @@ document.getElementById('eventForm').addEventListener('submit', async (e) => {
 
 // ===== Event chat modal =====
 let ACTIVE_EVENT_TAG = null;
+let ACTIVE_EVENT_SINCE = null;
 let eventChatModalInstance = null;
 
 function escapeHtmlChatEv(str) {
@@ -116,8 +117,9 @@ function escapeHtmlChatEv(str) {
   return div.innerHTML;
 }
 
-function openEventChat(tag, title) {
+function openEventChat(tag, title, createdAt) {
   ACTIVE_EVENT_TAG = tag;
+  ACTIVE_EVENT_SINCE = createdAt;
   document.getElementById('eventChatModalTitle').textContent = `💬 Chat - ${title} (-${tag}-)`;
   if (!eventChatModalInstance) {
     eventChatModalInstance = new bootstrap.Modal(document.getElementById('eventChatModal'));
@@ -131,9 +133,10 @@ async function loadEventChat() {
   const log = document.getElementById('eventChatLog');
   log.innerHTML = '<p class="text-secondary">Laster...</p>';
   try {
-    const posts = await Api.get(`/api/posts/by-tag/${encodeURIComponent(ACTIVE_EVENT_TAG)}`);
+    const sinceParam = ACTIVE_EVENT_SINCE ? `&since=${encodeURIComponent(ACTIVE_EVENT_SINCE)}` : '';
+    const posts = await Api.get(`/api/posts/by-tag/${encodeURIComponent(ACTIVE_EVENT_TAG)}?dummy=1${sinceParam}`);
     if (posts.length === 0) {
-      log.innerHTML = `<p class="text-secondary">Ingen meldinger med "-${ACTIVE_EVENT_TAG}-" enda.</p>`;
+      log.innerHTML = `<p class="text-secondary">Ingen meldinger med "-${ACTIVE_EVENT_TAG}-" siden eventet ble laget.</p>`;
       return;
     }
     log.innerHTML = posts.map(p => `

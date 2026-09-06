@@ -219,6 +219,13 @@ body {
 .chat-line b { color: var(--accent); }
 .chat-time { color: var(--text-dim); font-size: 10.5px; margin-left: 6px; }
 
+/* ---------- Post like/comment actions ---------- */
+.post-actions button { color: #cfd6e0; }
+.post-actions button:hover { color: var(--accent); }
+.comment-line { background: var(--bg-panel-2); border-radius: 6px; padding: 5px 8px; margin-bottom: 4px; font-size: 12.5px; }
+.comment-line b { color: var(--accent); }
+
+
 
 /* misc */
 .btn-noob { background: var(--accent); color:#14171c; font-weight:800; border:none; }

@@ -140,12 +140,65 @@ function renderCharacterContent() {
           <div id="bossPanel"></div>
         </div>
       </div>
+
+      <div class="col-12">
+        <div class="panel p-3">
+          <h6 class="text-secondary mb-2">📜 Achievements & Loot</h6>
+          <div id="achievementsPanel" style="max-height: 320px; overflow-y:auto;"></div>
+        </div>
+      </div>
     </div>
   `;
 
   renderEquipScreen(isOwner);
   renderStats();
   renderBossCounts();
+  renderAchievements();
+}
+
+function achTimeAgo(iso) {
+  const diffMs = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diffMs / 60000);
+  if (mins < 1) return 'akkurat nå';
+  if (mins < 60) return `${mins} min siden`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours} t siden`;
+  const days = Math.floor(hours / 24);
+  return `${days} d siden`;
+}
+
+function achEscapeHtml(str) {
+  const div = document.createElement('div');
+  div.innerText = str;
+  return div.innerHTML;
+}
+
+async function renderAchievements() {
+  const panel = document.getElementById('achievementsPanel');
+  const c = ACTIVE_CHAR;
+  panel.innerHTML = '<p class="text-secondary" style="font-size:12px;">Laster...</p>';
+  try {
+    const [loot, achievements] = await Promise.all([
+      Api.get(`/api/posts?characterId=${c.id}&type=loot`),
+      Api.get(`/api/posts?characterId=${c.id}&type=achievement`)
+    ]);
+    const combined = [...loot, ...achievements].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    if (combined.length === 0) {
+      panel.innerHTML = '<p class="text-secondary" style="font-size:12px;">Ingen loot eller achievements registrert enda - kobler til automatisk via RuneLite-webhooken (se Settings), eller flex manuelt i hjem-feeden.</p>';
+      return;
+    }
+
+    panel.innerHTML = combined.map(p => `
+      <div class="stat-pill mb-1" style="display:flex; align-items:center; gap:8px;">
+        ${p.imageUrl ? `<img src="${p.imageUrl}" style="width:22px; height:22px; object-fit:contain;" onerror="this.style.display='none'">` : ''}
+        <span style="flex:1; text-align:left;">${achEscapeHtml(p.content)}</span>
+        <span class="text-secondary" style="font-size:10px;">${achTimeAgo(p.createdAt)}</span>
+      </div>
+    `).join('');
+  } catch (err) {
+    panel.innerHTML = `<div class="alert alert-danger py-1 px-2" style="font-size:12px;">${err.message}</div>`;
+  }
 }
 
 function switchStyle(style) {
