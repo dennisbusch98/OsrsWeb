@@ -1,0 +1,48 @@
+{
+  "note": "Stats marked \"verified\" were checked against the OSRS Wiki (Sept 2026). Everything else is an approximation for comparing loadouts, not a live pull from the Wiki's own DPS calculator (whose source code is not something we can copy - see README).",
+  "monsters": [
+    {
+      "id": "wise_old_man",
+      "name": "Wise Old Man",
+      "img": "Wise_Old_Man.png",
+      "hp": 60,
+      "defenceLevel": 60,
+      "defenceBonus": 20,
+      "note": "Ikke en reell drepbar boss i spillet - brukt som en nøytral \"dummy\"-motstander for å teste oppsett, akkurat som standard-målet i OSRS Wiki sin egen DPS-calculator. Stats er en tilnærming (han har ingen offisiell kampstatistikk)."
+    },
+    {
+      "id": "zulrah",
+      "name": "Zulrah",
+      "img": "Zulrah.png",
+      "hp": 500,
+      "defenceLevel": 300,
+      "defenceBonus": 50,
+      "note": "Defence-nivå 300 er verifisert mot Wikien. Zulrah har 0 melee-defence (kun rekkbar med halberd) og bytter styrke/svakhet mellom range/magic per fase - dette forenkler vi til ett tall."
+    },
+    { "id": "vorkath", "name": "Vorkath", "img": "Vorkath.png", "hp": 750, "defenceLevel": 214, "defenceBonus": 60 },
+    { "id": "cerberus", "name": "Cerberus", "img": "Cerberus.png", "hp": 1200, "defenceLevel": 220, "defenceBonus": 45 },
+    { "id": "general_graardor", "name": "General Graardor", "img": "General_Graardor.png", "hp": 1500, "defenceLevel": 200, "defenceBonus": 40 },
+    { "id": "vetion", "name": "Vet'ion", "img": "Vet%27ion.png", "hp": 700, "defenceLevel": 220, "defenceBonus": 55 },
+    { "id": "callisto", "name": "Callisto", "img": "Callisto.png", "hp": 1000, "defenceLevel": 220, "defenceBonus": 50 },
+    { "id": "duke_sucellus", "name": "Duke Sucellus", "img": "Duke_Sucellus.png", "hp": 1000, "defenceLevel": 275, "defenceBonus": 55 },
+    { "id": "the_leviathan", "name": "The Leviathan", "img": "The_Leviathan.png", "hp": 1100, "defenceLevel": 260, "defenceBonus": 50 },
+    {
+      "id": "tumekens_warden",
+      "name": "Tumeken's Warden",
+      "img": "Tumeken%27s_Warden.png",
+      "hp": 700,
+      "defenceLevel": 180,
+      "defenceBonus": 50,
+      "note": "Defence-nivået 180 er verifisert (enrage-verdien; svinger mellom 120-180 gjennom fasen). HP er en tilnærming - dette er en flerfase-fight med varierende defence, forenklet til ett representativt tall her."
+    },
+    {
+      "id": "elidinis_warden",
+      "name": "Elidinis' Warden",
+      "img": "Elidinis%27_Warden.png",
+      "hp": 700,
+      "defenceLevel": 180,
+      "defenceBonus": 50,
+      "note": "Samme som Tumeken's Warden - defence-nivå 180 verifisert, HP tilnærmet, flerfase-fight forenklet til ett tall."
+    }
+  ]
+}

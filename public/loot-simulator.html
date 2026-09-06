@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stuck of Amascut - Loot Simulator</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="/css/style.css" rel="stylesheet">
+<style>
+  .ls-drop-row { display:flex; align-items:center; gap:10px; background:#232935; border:1px solid #2c333f; border-radius:8px; padding:8px; margin-bottom:6px;}
+  .ls-drop-row img { width:26px; height:26px; object-fit:contain; }
+  .ls-drop-row .nm { flex:1; font-size:13px; }
+  .ls-drop-row .rt { font-size:11px; color:#ffb300; }
+  .ls-loot-slot { position:relative; background:#14171c; border:1px solid #2c333f; border-radius:6px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; }
+  .ls-loot-slot img { max-width:30px; max-height:30px; }
+  .ls-loot-count { position:absolute; top:2px; left:4px; font-size:10px; font-weight:bold; color:#ffd23f; text-shadow:1px 1px 0 #000; }
+  .ls-luck-row { display:flex; align-items:center; gap:8px; background:#232935; border:1px solid #2c333f; border-radius:8px; padding:8px; margin-bottom:6px; }
+  .ls-luck-row img { width:24px; height:24px; }
+  .ls-luck-row .nm { flex:1; font-size:12.5px; }
+  .ls-luck-row input { width:70px; }
+  .top-tab-btn { flex:1; padding:12px; font-weight:800; border-radius:10px; border:1px solid #2c333f; background:#1c2128; color:#cfd6e0; }
+  .top-tab-btn.active { background:#ffb300; color:#14171c; }
+  .lvl-input-row { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+  .lvl-input-row label { width:90px; font-size:12px; color:#9aa4b2; }
+</style>
+</head>
+<body>
+
+<div id="navbarPlaceholder"></div>
+
+<div class="container-fluid" style="max-width:1300px; padding-bottom:60px;">
+
+  <div class="d-flex gap-2 mb-3">
+    <button class="top-tab-btn active" id="topTabSim" onclick="showTopTab('sim')">🎲 Loot Simulator</button>
+    <button class="top-tab-btn" id="topTabDps" onclick="showTopTab('dps')">⚔️ DPS Calculator</button>
+  </div>
+
+  <!-- ===================== LOOT SIMULATOR ===================== -->
+  <div id="topTabContentSim" class="row g-3">
+
+    <div class="col-lg-3">
+      <div class="panel p-3">
+        <h6 class="text-secondary">Velg boss</h6>
+        <select class="form-select form-select-sm mb-2" id="bossSelect"></select>
+        <div class="gear-slot-card p-2" style="text-align:left; font-size:12px;" id="gearTip"></div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="panel p-3 mb-3">
+        <h4 class="font-rune" id="bossTitle" style="color:#ffb300;">Simulator</h4>
+
+        <div class="mb-2" id="coxPointsGroup" style="display:none;">
+          <label class="form-label" style="font-size:12px;">Points per Raid</label>
+          <input type="number" class="form-control form-control-sm" id="coxPoints" value="30000">
+        </div>
+        <div class="mb-2" id="toaChanceGroup" style="display:none;">
+          <label class="form-label" style="font-size:12px;">Purple Chance per Raid (%)</label>
+          <input type="number" class="form-control form-control-sm" id="toaChance" value="4.0" step="0.1">
+        </div>
+
+        <label class="form-label" style="font-size:12px;" id="killsLabel">Antall kills å simulere</label>
+        <input type="number" class="form-control form-control-sm mb-2" id="manualKills" placeholder="f.eks. 500" min="1">
+
+        <div class="d-flex gap-2 mb-3">
+          <button class="btn btn-noob btn-sm flex-grow-1" onclick="runSimulation()">Kjør simulering</button>
+          <button class="btn btn-outline-light btn-sm" onclick="resetGrind()">Nullstill</button>
+        </div>
+
+        <div class="panel-2 p-3 rounded">
+          <div class="stat-pill mb-1"><span id="kcLabelText">Totalt KC</span><b id="totalKC">0</b></div>
+          <div class="stat-pill mb-1"><span>Mål-drop (<span id="targetItemName"></span>)</span><b id="targetDropCount">0</b></div>
+          <div class="stat-pill mb-1" id="dt2ProgressRow" style="display:none;"><span>Gold rings mot vestige</span><b id="dt2RollsCount">0/2</b></div>
+          <div class="stat-pill mb-2"><span>Sjanse for minst 1</span><b id="percentile">0%</b></div>
+          <div class="alert py-1 px-2 mb-0" id="statusBadge" style="font-size:12.5px;"></div>
+        </div>
+      </div>
+
+      <div class="panel p-3">
+        <h6 class="text-secondary">🎒 Loot fått (verdi: <span id="totalValue" style="color:#4caf50;">0 GP</span>)</h6>
+        <div class="row row-cols-6 g-1" id="lootGrid"></div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="panel p-3 mb-3">
+        <h6 class="text-secondary">📜 Drop table</h6>
+        <div id="dropTableList" style="max-height:260px; overflow-y:auto;"></div>
+      </div>
+
+      <div class="panel p-3">
+        <h6 class="text-secondary">🔮 Flaks-sjekker</h6>
+        <p class="text-secondary" style="font-size:11.5px;">Legg inn total KC + hva du faktisk har fått, så regnes ekte binomisk sannsynlighet ut (hvor spoonet/dry du er).</p>
+        <div class="mb-2">
+          <label style="font-size:12px;">Totalt antall kills</label>
+          <input type="number" class="form-control form-control-sm" id="luckKC" placeholder="f.eks. 500" min="0">
+        </div>
+        <div id="luckItemsList" style="max-height:200px; overflow-y:auto;"></div>
+        <div class="d-flex gap-2 mt-2">
+          <button class="btn btn-noob btn-sm flex-grow-1" onclick="calcLuck()">Beregn sjanse</button>
+          <button class="btn btn-outline-light btn-sm" onclick="resetLuckInputs()">Nullstill</button>
+        </div>
+        <div id="luckResults" class="mt-2" style="max-height:260px; overflow-y:auto;"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== DPS CALCULATOR ===================== -->
+  <div id="topTabContentDps" class="row g-3 d-none">
+
+    <div class="col-lg-4">
+      <div class="panel p-3">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h6 class="text-secondary mb-0">⚔️ Bygg oppsett</h6>
+          <div class="btn-group btn-group-sm" id="dpsStyleTabs">
+            <button class="btn btn-noob" data-style="melee">⚔️ Melee</button>
+            <button class="btn btn-outline-light" data-style="range">🏹 Range</button>
+            <button class="btn btn-outline-light" data-style="magic">🔮 Magic</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-auto mx-auto">
+            <div class="equip-screen" id="dpsEquipScreen"></div>
+          </div>
+        </div>
+        <div id="dpsPickerPanel" class="mt-2"></div>
+        <button class="btn btn-outline-light btn-sm w-100 mt-2" onclick="loadMyGearIntoCalc()">📥 Last inn mitt lagrede oppsett</button>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="panel p-3 mb-3">
+        <h6 class="text-secondary">🧍 Dine nivåer</h6>
+        <div class="lvl-input-row"><label>Attack</label><input type="number" class="form-control form-control-sm" id="dpsAttackLvl" value="99"></div>
+        <div class="lvl-input-row"><label>Strength</label><input type="number" class="form-control form-control-sm" id="dpsStrengthLvl" value="99"></div>
+        <div class="lvl-input-row"><label>Ranged</label><input type="number" class="form-control form-control-sm" id="dpsRangedLvl" value="99"></div>
+        <div class="lvl-input-row"><label>Magic</label><input type="number" class="form-control form-control-sm" id="dpsMagicLvl" value="99"></div>
+      </div>
+
+      <div class="panel p-3">
+        <h6 class="text-secondary">🎯 Mål</h6>
+        <select class="form-select form-select-sm mb-2" id="dpsMonster"></select>
+        <div class="d-flex align-items-center gap-2" id="dpsMonsterInfo"></div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="panel p-3">
+        <h6 class="text-secondary">📈 Resultat</h6>
+        <div id="dpsResult"><p class="text-secondary" style="font-size:12.5px;">Velg våpen for å se DPS.</p></div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/navbar.js"></script>
+<script src="/js/bossData.js"></script>
+<script src="/js/lootsim.js"></script>
+<script src="/js/dpscalc.js"></script>
+<script>
+  function showTopTab(which) {
+    document.getElementById('topTabContentSim').classList.toggle('d-none', which !== 'sim');
+    document.getElementById('topTabContentDps').classList.toggle('d-none', which !== 'dps');
+    document.getElementById('topTabSim').classList.toggle('active', which === 'sim');
+    document.getElementById('topTabDps').classList.toggle('active', which === 'dps');
+  }
+
+  if (requireLoginOrRedirect()) {
+    initDpsCalc();
+  }
+</script>
+</body>
+</html>
