@@ -192,6 +192,29 @@ const BOSS_DATA = {
       { name: "Hellpuppy", rate: 3000, value: 0, img: "Hellpuppy.png" }
     ]
   },
+  demonicgorilla: {
+    name: "Demonic Gorilla", unitName: "Kills", keyItem: "Zenyte shard", type: "standard",
+    gear: "Melee/Range/Magic - de bytter stil etter 3 bom, og bruker protection prayer mot din siste brukte stil. Krever konstant prayer- og gear-switching (demonbane-våpen anbefales).",
+    drops: [
+      { name: "Zenyte shard", rate: 300, value: 16900000, img: "Zenyte_shard.png" },
+      { name: "Ballista limbs", rate: 500, value: 100000, img: "Ballista_limbs.png" },
+      { name: "Ballista spring", rate: 500, value: 100000, img: "Ballista_spring.png" },
+      { name: "Light frame", rate: 750, value: 50000, img: "Light_frame.png" },
+      { name: "Heavy frame", rate: 1500, value: 200000, img: "Heavy_frame.png" }
+    ]
+  },
+  yama: {
+    name: "Yama", unitName: "Kills", keyItem: "Oathplate helm", type: "standard",
+    gear: "Melee (slash). Oathplate/Torva + Soulreaper axe/Osmumten's fang. Følg Shadow Waves/Fire Streaks-mekanikken, Shadow Crash-fellen midt i arenaen.",
+    drops: [
+      { name: "Oathplate helm", rate: 600, value: 55000000, img: "Oathplate_helm.png" },
+      { name: "Oathplate chest", rate: 600, value: 75000000, img: "Oathplate_chest.png" },
+      { name: "Oathplate legs", rate: 600, value: 65000000, img: "Oathplate_legs.png" },
+      { name: "Soulflame horn", rate: 300, value: 45000000, img: "Soulflame_horn.png" },
+      { name: "Oathplate shards", rate: 15, value: 170000, img: "Oathplate_shards.png" },
+      { name: "Yami", rate: 2500, value: 0, img: "Yami.png" }
+    ]
+  },
   shaman: {
     name: "Lizardman Shaman", unitName: "Kills", keyItem: "Dragon warhammer", type: "standard",
     gear: "Melee eller Range. Enkel slayer-boss, ingen spesiell mekanikk.",

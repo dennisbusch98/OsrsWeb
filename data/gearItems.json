@@ -17,7 +17,7 @@
     "range",
     "magic"
   ],
-  "note": "Item bonuses used by the DPS calculator are DERIVED from each item's 'tier' (1-10), not exact OSRS Wiki stat blocks - see dpscalc.js. Treat DPS numbers as relative/illustrative, not wiki-precise.",
+  "note": "The 'style' tag is just an informational label shown in the picker - the picker itself shows ALL items for every slot, so you can freely mix melee/range/magic pieces in the same loadout. Item bonuses used by the DPS calculator are DERIVED from each item's 'tier' (1-10), not exact OSRS Wiki stat blocks - see dpscalc.js.",
   "items": {
     "head": [
       {
@@ -31,6 +31,12 @@
         "img": "Iron_full_helm.png",
         "style": "melee",
         "tier": 2
+      },
+      {
+        "name": "Adamant full helm",
+        "img": "Adamant_full_helm.png",
+        "style": "melee",
+        "tier": 3
       },
       {
         "name": "Rune full helm",
@@ -69,6 +75,12 @@
         "tier": 8
       },
       {
+        "name": "Obsidian helmet",
+        "img": "Obsidian_helmet.png",
+        "style": "melee",
+        "tier": 4
+      },
+      {
         "name": "Serpentine helm",
         "img": "Serpentine_helm.png",
         "style": "range",
@@ -79,6 +91,12 @@
         "img": "Robin_hood_hat.png",
         "style": "range",
         "tier": 3
+      },
+      {
+        "name": "Coif",
+        "img": "Coif.png",
+        "style": "range",
+        "tier": 2
       },
       {
         "name": "Void ranger helm",
@@ -105,6 +123,12 @@
         "tier": 6
       },
       {
+        "name": "Karil's coif",
+        "img": "Karil%27s_coif.png",
+        "style": "range",
+        "tier": 5
+      },
+      {
         "name": "Wizard hat (g)",
         "img": "Wizard_hat_%28g%29.png",
         "style": "magic",
@@ -129,10 +153,46 @@
         "tier": 9
       },
       {
+        "name": "Infinity hat",
+        "img": "Infinity_hat.png",
+        "style": "magic",
+        "tier": 3
+      },
+      {
         "name": "Slayer helmet (i)",
         "img": "Slayer_helmet_%28i%29.png",
         "style": "all",
         "tier": 6
+      },
+      {
+        "name": "Dharok's helm",
+        "img": "Dharok%27s_helm.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Guthan's helm",
+        "img": "Guthan%27s_helm.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Torag's helm",
+        "img": "Torag%27s_helm.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Verac's helm",
+        "img": "Verac%27s_helm.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Oathplate helm",
+        "img": "Oathplate_helm.png",
+        "style": "melee",
+        "tier": 10
       }
     ],
     "cape": [
@@ -161,10 +221,22 @@
         "tier": 8
       },
       {
+        "name": "Fremennik cloak",
+        "img": "Fremennik_cloak.png",
+        "style": "melee",
+        "tier": 3
+      },
+      {
         "name": "Ava's assembler",
         "img": "Ava%27s_assembler.png",
         "style": "range",
         "tier": 8
+      },
+      {
+        "name": "Ava's accumulator",
+        "img": "Ava%27s_accumulator.png",
+        "style": "range",
+        "tier": 4
       },
       {
         "name": "Dizana's quiver (uncharged)",
@@ -175,6 +247,18 @@
       {
         "name": "Imbued guthix cape",
         "img": "Imbued_guthix_cape.png",
+        "style": "magic",
+        "tier": 7
+      },
+      {
+        "name": "Imbued saradomin cape",
+        "img": "Imbued_saradomin_cape.png",
+        "style": "magic",
+        "tier": 7
+      },
+      {
+        "name": "Imbued zamorak cape",
+        "img": "Imbued_zamorak_cape.png",
         "style": "magic",
         "tier": 7
       },
@@ -199,6 +283,12 @@
         "tier": 2
       },
       {
+        "name": "Amulet of strength",
+        "img": "Amulet_of_strength.png",
+        "style": "melee",
+        "tier": 2
+      },
+      {
         "name": "Amulet of fury",
         "img": "Amulet_of_fury.png",
         "style": "all",
@@ -217,6 +307,12 @@
         "tier": 9
       },
       {
+        "name": "Berserker necklace",
+        "img": "Berserker_necklace.png",
+        "style": "melee",
+        "tier": 3
+      },
+      {
         "name": "Necklace of anguish",
         "img": "Necklace_of_anguish.png",
         "style": "range",
@@ -233,6 +329,12 @@
         "img": "Salve_amulet_%28ei%29.png",
         "style": "all",
         "tier": 7
+      },
+      {
+        "name": "Salve amulet (i)",
+        "img": "Salve_amulet_%28i%29.png",
+        "style": "all",
+        "tier": 6
       }
     ],
     "ammo": [
@@ -241,6 +343,30 @@
         "img": "Bronze_arrow.png",
         "style": "range",
         "tier": 1
+      },
+      {
+        "name": "Iron arrow",
+        "img": "Iron_arrow.png",
+        "style": "range",
+        "tier": 1
+      },
+      {
+        "name": "Steel arrow",
+        "img": "Steel_arrow.png",
+        "style": "range",
+        "tier": 2
+      },
+      {
+        "name": "Mithril arrow",
+        "img": "Mithril_arrow.png",
+        "style": "range",
+        "tier": 2
+      },
+      {
+        "name": "Adamant arrow",
+        "img": "Adamant_arrow.png",
+        "style": "range",
+        "tier": 3
       },
       {
         "name": "Rune arrow",
@@ -261,6 +387,24 @@
         "tier": 6
       },
       {
+        "name": "Bronze bolts",
+        "img": "Bronze_bolts.png",
+        "style": "range",
+        "tier": 1
+      },
+      {
+        "name": "Steel bolts",
+        "img": "Steel_bolts.png",
+        "style": "range",
+        "tier": 2
+      },
+      {
+        "name": "Runite bolts",
+        "img": "Runite_bolts.png",
+        "style": "range",
+        "tier": 4
+      },
+      {
         "name": "Dragon bolts (unf)",
         "img": "Dragon_bolts_%28unf%29.png",
         "style": "range",
@@ -271,6 +415,12 @@
         "img": "Ruby_dragon_bolts_%28e%29.png",
         "style": "range",
         "tier": 7
+      },
+      {
+        "name": "Diamond bolts (e)",
+        "img": "Diamond_bolts_%28e%29.png",
+        "style": "range",
+        "tier": 6
       },
       {
         "name": "None",
@@ -289,10 +439,42 @@
         "speed": 4
       },
       {
+        "name": "Iron scimitar",
+        "img": "Iron_scimitar.png",
+        "style": "melee",
+        "tier": 1,
+        "attackType": "slash",
+        "speed": 4
+      },
+      {
+        "name": "Mithril scimitar",
+        "img": "Mithril_scimitar.png",
+        "style": "melee",
+        "tier": 2,
+        "attackType": "slash",
+        "speed": 4
+      },
+      {
+        "name": "Adamant scimitar",
+        "img": "Adamant_scimitar.png",
+        "style": "melee",
+        "tier": 2,
+        "attackType": "slash",
+        "speed": 4
+      },
+      {
         "name": "Rune scimitar",
         "img": "Rune_scimitar.png",
         "style": "melee",
         "tier": 3,
+        "attackType": "slash",
+        "speed": 4
+      },
+      {
+        "name": "Dragon scimitar",
+        "img": "Dragon_scimitar.png",
+        "style": "melee",
+        "tier": 4,
         "attackType": "slash",
         "speed": 4
       },
@@ -305,12 +487,44 @@
         "speed": 4
       },
       {
-        "name": "Dragon scimitar",
-        "img": "Dragon_scimitar.png",
+        "name": "Abyssal tentacle",
+        "img": "Abyssal_tentacle.png",
+        "style": "melee",
+        "tier": 6,
+        "attackType": "slash",
+        "speed": 4
+      },
+      {
+        "name": "Dragon dagger",
+        "img": "Dragon_dagger.png",
+        "style": "melee",
+        "tier": 3,
+        "attackType": "stab",
+        "speed": 4
+      },
+      {
+        "name": "Dragon longsword",
+        "img": "Dragon_longsword.png",
         "style": "melee",
         "tier": 4,
         "attackType": "slash",
         "speed": 4
+      },
+      {
+        "name": "Granite maul",
+        "img": "Granite_maul.png",
+        "style": "melee",
+        "tier": 5,
+        "attackType": "crush",
+        "speed": 4
+      },
+      {
+        "name": "Abyssal bludgeon",
+        "img": "Abyssal_bludgeon.png",
+        "style": "melee",
+        "tier": 7,
+        "attackType": "crush",
+        "speed": 5
       },
       {
         "name": "Ghrazi rapier",
@@ -345,6 +559,22 @@
         "speed": 4
       },
       {
+        "name": "Armadyl godsword",
+        "img": "Armadyl_godsword.png",
+        "style": "melee",
+        "tier": 7,
+        "attackType": "slash",
+        "speed": 6
+      },
+      {
+        "name": "Bandos godsword",
+        "img": "Bandos_godsword.png",
+        "style": "melee",
+        "tier": 7,
+        "attackType": "crush",
+        "speed": 6
+      },
+      {
         "name": "Scythe of vitur",
         "img": "Scythe_of_vitur.png",
         "style": "melee",
@@ -361,10 +591,50 @@
         "speed": 6
       },
       {
+        "name": "Inquisitor's mace",
+        "img": "Inquisitor%27s_mace.png",
+        "style": "melee",
+        "tier": 7,
+        "attackType": "crush",
+        "speed": 4
+      },
+      {
         "name": "Shortbow",
         "img": "Shortbow.png",
         "style": "range",
         "tier": 1,
+        "attackType": "range",
+        "speed": 3
+      },
+      {
+        "name": "Oak shortbow",
+        "img": "Oak_shortbow.png",
+        "style": "range",
+        "tier": 1,
+        "attackType": "range",
+        "speed": 3
+      },
+      {
+        "name": "Willow shortbow",
+        "img": "Willow_shortbow.png",
+        "style": "range",
+        "tier": 2,
+        "attackType": "range",
+        "speed": 3
+      },
+      {
+        "name": "Maple shortbow",
+        "img": "Maple_shortbow.png",
+        "style": "range",
+        "tier": 2,
+        "attackType": "range",
+        "speed": 3
+      },
+      {
+        "name": "Yew shortbow",
+        "img": "Yew_shortbow.png",
+        "style": "range",
+        "tier": 3,
         "attackType": "range",
         "speed": 3
       },
@@ -377,10 +647,26 @@
         "speed": 3
       },
       {
+        "name": "Magic shortbow (i)",
+        "img": "Magic_shortbow_%28i%29.png",
+        "style": "range",
+        "tier": 4,
+        "attackType": "range",
+        "speed": 3
+      },
+      {
         "name": "Rune crossbow",
         "img": "Rune_crossbow.png",
         "style": "range",
         "tier": 3,
+        "attackType": "range",
+        "speed": 5
+      },
+      {
+        "name": "Armadyl crossbow",
+        "img": "Armadyl_crossbow.png",
+        "style": "range",
+        "tier": 5,
         "attackType": "range",
         "speed": 5
       },
@@ -409,8 +695,8 @@
         "speed": 5
       },
       {
-        "name": "Bow of faerdhinen",
-        "img": "Bow_of_faerdhinen_%28c%29.png",
+        "name": "Bow of Faerdhinen",
+        "img": "Bow_of_Faerdhinen.png",
         "style": "range",
         "tier": 9,
         "attackType": "range",
@@ -425,12 +711,36 @@
         "speed": 5
       },
       {
+        "name": "Heavy ballista",
+        "img": "Heavy_ballista.png",
+        "style": "range",
+        "tier": 6,
+        "attackType": "range",
+        "speed": 5
+      },
+      {
         "name": "Iban's staff",
         "img": "Iban%27s_staff.png",
         "style": "magic",
         "tier": 3,
         "attackType": "magic",
         "speed": 5
+      },
+      {
+        "name": "Ancient staff",
+        "img": "Ancient_staff.png",
+        "style": "magic",
+        "tier": 3,
+        "attackType": "magic",
+        "speed": 5
+      },
+      {
+        "name": "Slayer's staff (e)",
+        "img": "Slayer%27s_staff_%28e%29.png",
+        "style": "magic",
+        "tier": 4,
+        "attackType": "magic",
+        "speed": 4
       },
       {
         "name": "Trident of the seas",
@@ -457,10 +767,26 @@
         "speed": 4
       },
       {
+        "name": "Nightmare staff",
+        "img": "Nightmare_staff.png",
+        "style": "magic",
+        "tier": 7,
+        "attackType": "magic",
+        "speed": 4
+      },
+      {
         "name": "Harmonised nightmare staff",
         "img": "Harmonised_nightmare_staff.png",
         "style": "magic",
         "tier": 8,
+        "attackType": "magic",
+        "speed": 4
+      },
+      {
+        "name": "Kodai wand",
+        "img": "Kodai_wand.png",
+        "style": "magic",
+        "tier": 7,
         "attackType": "magic",
         "speed": 4
       },
@@ -471,6 +797,54 @@
         "tier": 10,
         "attackType": "magic",
         "speed": 4
+      },
+      {
+        "name": "Dharok's greataxe",
+        "img": "Dharok%27s_greataxe.png",
+        "style": "melee",
+        "tier": 5,
+        "attackType": "slash",
+        "speed": 7
+      },
+      {
+        "name": "Guthan's warspear",
+        "img": "Guthan%27s_warspear.png",
+        "style": "melee",
+        "tier": 5,
+        "attackType": "stab",
+        "speed": 5
+      },
+      {
+        "name": "Torag's hammers",
+        "img": "Torag%27s_hammers.png",
+        "style": "melee",
+        "tier": 5,
+        "attackType": "crush",
+        "speed": 5
+      },
+      {
+        "name": "Verac's flail",
+        "img": "Verac%27s_flail.png",
+        "style": "melee",
+        "tier": 5,
+        "attackType": "crush",
+        "speed": 4
+      },
+      {
+        "name": "Karil's crossbow",
+        "img": "Karil%27s_crossbow.png",
+        "style": "range",
+        "tier": 5,
+        "attackType": "range",
+        "speed": 5
+      },
+      {
+        "name": "Ahrim's staff",
+        "img": "Ahrim%27s_staff.png",
+        "style": "magic",
+        "tier": 5,
+        "attackType": "magic",
+        "speed": 5
       }
     ],
     "shield": [
@@ -479,6 +853,12 @@
         "img": "Wooden_shield.png",
         "style": "melee",
         "tier": 1
+      },
+      {
+        "name": "Adamant kiteshield",
+        "img": "Adamant_kiteshield.png",
+        "style": "melee",
+        "tier": 2
       },
       {
         "name": "Rune kiteshield",
@@ -493,10 +873,22 @@
         "tier": 6
       },
       {
+        "name": "Dragonfire ward",
+        "img": "Dragonfire_ward.png",
+        "style": "all",
+        "tier": 6
+      },
+      {
         "name": "Avernic defender",
         "img": "Avernic_defender.png",
         "style": "melee",
         "tier": 8
+      },
+      {
+        "name": "Dragon defender",
+        "img": "Dragon_defender.png",
+        "style": "melee",
+        "tier": 5
       },
       {
         "name": "Twisted buckler",
@@ -511,10 +903,22 @@
         "tier": 6
       },
       {
+        "name": "Odium ward",
+        "img": "Odium_ward.png",
+        "style": "range",
+        "tier": 6
+      },
+      {
         "name": "Book of the dead",
         "img": "Book_of_the_dead.png",
         "style": "magic",
         "tier": 7
+      },
+      {
+        "name": "Malediction ward",
+        "img": "Malediction_ward.png",
+        "style": "magic",
+        "tier": 6
       },
       {
         "name": "Elidinis' ward (f)",
@@ -543,6 +947,18 @@
         "tier": 1
       },
       {
+        "name": "Mithril platebody",
+        "img": "Mithril_platebody.png",
+        "style": "melee",
+        "tier": 2
+      },
+      {
+        "name": "Adamant platebody",
+        "img": "Adamant_platebody.png",
+        "style": "melee",
+        "tier": 2
+      },
+      {
         "name": "Rune platebody",
         "img": "Rune_platebody.png",
         "style": "melee",
@@ -551,6 +967,12 @@
       {
         "name": "Fighter torso",
         "img": "Fighter_torso.png",
+        "style": "melee",
+        "tier": 4
+      },
+      {
+        "name": "Obsidian platebody",
+        "img": "Obsidian_platebody.png",
         "style": "melee",
         "tier": 4
       },
@@ -579,6 +1001,30 @@
         "tier": 5
       },
       {
+        "name": "Elite void top",
+        "img": "Elite_void_top.png",
+        "style": "all",
+        "tier": 6
+      },
+      {
+        "name": "Green d'hide body",
+        "img": "Green_d%27hide_body.png",
+        "style": "range",
+        "tier": 2
+      },
+      {
+        "name": "Blue d'hide body",
+        "img": "Blue_d%27hide_body.png",
+        "style": "range",
+        "tier": 2
+      },
+      {
+        "name": "Black d'hide body",
+        "img": "Black_d%27hide_body.png",
+        "style": "range",
+        "tier": 3
+      },
+      {
         "name": "Karil's leathertop",
         "img": "Karil%27s_leathertop.png",
         "style": "range",
@@ -597,6 +1043,12 @@
         "tier": 9
       },
       {
+        "name": "Mystic robe top",
+        "img": "Mystic_robe_top.png",
+        "style": "magic",
+        "tier": 2
+      },
+      {
         "name": "Ahrim's robetop",
         "img": "Ahrim%27s_robetop.png",
         "style": "magic",
@@ -613,6 +1065,36 @@
         "img": "Ancestral_robe_top.png",
         "style": "magic",
         "tier": 9
+      },
+      {
+        "name": "Dharok's platebody",
+        "img": "Dharok%27s_platebody.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Guthan's platebody",
+        "img": "Guthan%27s_platebody.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Torag's platebody",
+        "img": "Torag%27s_platebody.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Verac's brassard",
+        "img": "Verac%27s_brassard.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Oathplate chest",
+        "img": "Oathplate_chest.png",
+        "style": "melee",
+        "tier": 10
       }
     ],
     "legs": [
@@ -621,6 +1103,18 @@
         "img": "Bronze_platelegs.png",
         "style": "melee",
         "tier": 1
+      },
+      {
+        "name": "Mithril platelegs",
+        "img": "Mithril_platelegs.png",
+        "style": "melee",
+        "tier": 2
+      },
+      {
+        "name": "Adamant platelegs",
+        "img": "Adamant_platelegs.png",
+        "style": "melee",
+        "tier": 2
       },
       {
         "name": "Rune platelegs",
@@ -659,6 +1153,30 @@
         "tier": 5
       },
       {
+        "name": "Elite void robe",
+        "img": "Elite_void_robe.png",
+        "style": "all",
+        "tier": 6
+      },
+      {
+        "name": "Green d'hide chaps",
+        "img": "Green_d%27hide_chaps.png",
+        "style": "range",
+        "tier": 2
+      },
+      {
+        "name": "Blue d'hide chaps",
+        "img": "Blue_d%27hide_chaps.png",
+        "style": "range",
+        "tier": 2
+      },
+      {
+        "name": "Black d'hide chaps",
+        "img": "Black_d%27hide_chaps.png",
+        "style": "range",
+        "tier": 3
+      },
+      {
         "name": "Karil's leatherskirt",
         "img": "Karil%27s_leatherskirt.png",
         "style": "range",
@@ -677,6 +1195,12 @@
         "tier": 9
       },
       {
+        "name": "Mystic robe bottom",
+        "img": "Mystic_robe_bottom.png",
+        "style": "magic",
+        "tier": 2
+      },
+      {
         "name": "Ahrim's robeskirt",
         "img": "Ahrim%27s_robeskirt.png",
         "style": "magic",
@@ -693,6 +1217,36 @@
         "img": "Ancestral_robe_bottom.png",
         "style": "magic",
         "tier": 9
+      },
+      {
+        "name": "Dharok's platelegs",
+        "img": "Dharok%27s_platelegs.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Guthan's chainskirt",
+        "img": "Guthan%27s_chainskirt.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Torag's platelegs",
+        "img": "Torag%27s_platelegs.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Verac's plateskirt",
+        "img": "Verac%27s_plateskirt.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
+        "name": "Oathplate legs",
+        "img": "Oathplate_legs.png",
+        "style": "melee",
+        "tier": 10
       }
     ],
     "hands": [
@@ -707,6 +1261,12 @@
         "img": "Combat_bracelet.png",
         "style": "all",
         "tier": 2
+      },
+      {
+        "name": "Rune gloves",
+        "img": "Rune_gloves.png",
+        "style": "all",
+        "tier": 3
       },
       {
         "name": "Barrows gloves",
@@ -753,6 +1313,12 @@
         "tier": 2
       },
       {
+        "name": "Rune boots",
+        "img": "Rune_boots.png",
+        "style": "melee",
+        "tier": 3
+      },
+      {
         "name": "Dragon boots",
         "img": "Dragon_boots.png",
         "style": "melee",
@@ -771,6 +1337,12 @@
         "tier": 8
       },
       {
+        "name": "Snakeskin boots",
+        "img": "Snakeskin_boots.png",
+        "style": "range",
+        "tier": 2
+      },
+      {
         "name": "Ranger boots",
         "img": "Ranger_boots.png",
         "style": "range",
@@ -781,6 +1353,12 @@
         "img": "Pegasian_boots.png",
         "style": "range",
         "tier": 8
+      },
+      {
+        "name": "Mystic boots",
+        "img": "Mystic_boots.png",
+        "style": "magic",
+        "tier": 2
       },
       {
         "name": "Infinity boots",
@@ -803,8 +1381,26 @@
         "tier": 1
       },
       {
+        "name": "Explorer's ring 4",
+        "img": "Explorer%27s_ring_4.png",
+        "style": "all",
+        "tier": 1
+      },
+      {
+        "name": "Warrior ring (i)",
+        "img": "Warrior_ring_%28i%29.png",
+        "style": "melee",
+        "tier": 5
+      },
+      {
         "name": "Berserker ring (i)",
         "img": "Berserker_ring_%28i%29.png",
+        "style": "melee",
+        "tier": 6
+      },
+      {
+        "name": "Brimstone ring",
+        "img": "Brimstone_ring.png",
         "style": "melee",
         "tier": 6
       },
