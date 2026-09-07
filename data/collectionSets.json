@@ -1,0 +1,336 @@
+{
+  "note": "Static definitions for the Collection Log tab - each set lists the items that count toward it. Green/red state is computed client-side by checking each item's name against the character's Bank.",
+  "sets": {
+    "barrows": {
+      "label": "Barrows",
+      "items": [
+        {
+          "name": "Dharok's helm",
+          "img": "Dharok%27s_helm.png"
+        },
+        {
+          "name": "Dharok's platebody",
+          "img": "Dharok%27s_platebody.png"
+        },
+        {
+          "name": "Dharok's platelegs",
+          "img": "Dharok%27s_platelegs.png"
+        },
+        {
+          "name": "Dharok's greataxe",
+          "img": "Dharok%27s_greataxe.png"
+        },
+        {
+          "name": "Guthan's helm",
+          "img": "Guthan%27s_helm.png"
+        },
+        {
+          "name": "Guthan's platebody",
+          "img": "Guthan%27s_platebody.png"
+        },
+        {
+          "name": "Guthan's chainskirt",
+          "img": "Guthan%27s_chainskirt.png"
+        },
+        {
+          "name": "Guthan's warspear",
+          "img": "Guthan%27s_warspear.png"
+        },
+        {
+          "name": "Karil's coif",
+          "img": "Karil%27s_coif.png"
+        },
+        {
+          "name": "Karil's leathertop",
+          "img": "Karil%27s_leathertop.png"
+        },
+        {
+          "name": "Karil's leatherskirt",
+          "img": "Karil%27s_leatherskirt.png"
+        },
+        {
+          "name": "Karil's crossbow",
+          "img": "Karil%27s_crossbow.png"
+        },
+        {
+          "name": "Torag's helm",
+          "img": "Torag%27s_helm.png"
+        },
+        {
+          "name": "Torag's platebody",
+          "img": "Torag%27s_platebody.png"
+        },
+        {
+          "name": "Torag's platelegs",
+          "img": "Torag%27s_platelegs.png"
+        },
+        {
+          "name": "Torag's hammers",
+          "img": "Torag%27s_hammers.png"
+        },
+        {
+          "name": "Verac's helm",
+          "img": "Verac%27s_helm.png"
+        },
+        {
+          "name": "Verac's brassard",
+          "img": "Verac%27s_brassard.png"
+        },
+        {
+          "name": "Verac's plateskirt",
+          "img": "Verac%27s_plateskirt.png"
+        },
+        {
+          "name": "Verac's flail",
+          "img": "Verac%27s_flail.png"
+        },
+        {
+          "name": "Ahrim's hood",
+          "img": "Ahrim%27s_hood.png"
+        },
+        {
+          "name": "Ahrim's robetop",
+          "img": "Ahrim%27s_robetop.png"
+        },
+        {
+          "name": "Ahrim's robeskirt",
+          "img": "Ahrim%27s_robeskirt.png"
+        },
+        {
+          "name": "Ahrim's staff",
+          "img": "Ahrim%27s_staff.png"
+        }
+      ]
+    },
+    "moons": {
+      "label": "Perilous Moons",
+      "items": [
+        {
+          "name": "Blue moon helm",
+          "img": "Blue_moon_helm.png"
+        },
+        {
+          "name": "Blue moon spear",
+          "img": "Blue_moon_spear.png"
+        },
+        {
+          "name": "Blue moon robe top",
+          "img": "Blue_moon_robe_top.png"
+        },
+        {
+          "name": "Blue moon robe bottoms",
+          "img": "Blue_moon_robe_bottoms.png"
+        },
+        {
+          "name": "Eclipse moon helm",
+          "img": "Eclipse_moon_helm.png"
+        },
+        {
+          "name": "Eclipse atlatl",
+          "img": "Eclipse_atlatl.png"
+        },
+        {
+          "name": "Eclipse moon chestplate",
+          "img": "Eclipse_moon_chestplate.png"
+        },
+        {
+          "name": "Eclipse moon tassets",
+          "img": "Eclipse_moon_tassets.png"
+        },
+        {
+          "name": "Blood moon helm",
+          "img": "Blood_moon_helm.png"
+        },
+        {
+          "name": "Dual macuahuitl",
+          "img": "Dual_macuahuitl.png"
+        },
+        {
+          "name": "Blood moon chestplate",
+          "img": "Blood_moon_chestplate.png"
+        },
+        {
+          "name": "Blood moon tassets",
+          "img": "Blood_moon_tassets.png"
+        }
+      ]
+    },
+    "corruptedgauntlet": {
+      "label": "Corrupted Gauntlet",
+      "items": [
+        {
+          "name": "Corrupted halberd",
+          "img": "Corrupted_halberd.png"
+        },
+        {
+          "name": "Corrupted bow",
+          "img": "Corrupted_bow.png"
+        },
+        {
+          "name": "Corrupted staff",
+          "img": "Corrupted_staff.png"
+        },
+        {
+          "name": "Enhanced crystal weapon seed",
+          "img": "Enhanced_crystal_weapon_seed.png"
+        }
+      ]
+    },
+    "void": {
+      "label": "Void Knight",
+      "items": [
+        {
+          "name": "Void knight top",
+          "img": "Void_knight_top.png"
+        },
+        {
+          "name": "Void knight robe",
+          "img": "Void_knight_robe.png"
+        },
+        {
+          "name": "Void knight gloves",
+          "img": "Void_knight_gloves.png"
+        },
+        {
+          "name": "Void ranger helm",
+          "img": "Void_ranger_helm.png"
+        },
+        {
+          "name": "Void mage helm",
+          "img": "Void_mage_helm.png"
+        },
+        {
+          "name": "Elite void top",
+          "img": "Elite_void_top.png"
+        },
+        {
+          "name": "Elite void robe",
+          "img": "Elite_void_robe.png"
+        }
+      ]
+    },
+    "dt2": {
+      "label": "DT2 Vestiges & Voidwaker",
+      "items": [
+        {
+          "name": "Ultor vestige",
+          "img": "Ultor_vestige.png"
+        },
+        {
+          "name": "Magus vestige",
+          "img": "Magus_vestige.png"
+        },
+        {
+          "name": "Bellator vestige",
+          "img": "Bellator_vestige.png"
+        },
+        {
+          "name": "Venator vestige",
+          "img": "Venator_vestige.png"
+        },
+        {
+          "name": "Voidwaker hilt",
+          "img": "Voidwaker_hilt.png"
+        },
+        {
+          "name": "Voidwaker blade",
+          "img": "Voidwaker_blade.png"
+        },
+        {
+          "name": "Voidwaker gem",
+          "img": "Voidwaker_gem.png"
+        },
+        {
+          "name": "Voidwaker",
+          "img": "Voidwaker.png"
+        }
+      ]
+    },
+    "toa": {
+      "label": "Tombs of Amascut",
+      "items": [
+        {
+          "name": "Osmumten's fang",
+          "img": "Osmumten%27s_fang.png"
+        },
+        {
+          "name": "Lightbearer",
+          "img": "Lightbearer.png"
+        },
+        {
+          "name": "Elidinis' ward",
+          "img": "Elidinis%27_ward.png"
+        },
+        {
+          "name": "Masori mask",
+          "img": "Masori_mask.png"
+        },
+        {
+          "name": "Masori body",
+          "img": "Masori_body.png"
+        },
+        {
+          "name": "Masori chaps",
+          "img": "Masori_chaps.png"
+        },
+        {
+          "name": "Tumeken's shadow",
+          "img": "Tumeken%27s_shadow_%28uncharged%29.png"
+        }
+      ]
+    },
+    "cox": {
+      "label": "Chambers of Xeric",
+      "items": [
+        {
+          "name": "Dexterous prayer scroll",
+          "img": "Dexterous_prayer_scroll.png"
+        },
+        {
+          "name": "Arcane prayer scroll",
+          "img": "Arcane_prayer_scroll.png"
+        },
+        {
+          "name": "Twisted buckler",
+          "img": "Twisted_buckler.png"
+        },
+        {
+          "name": "Dragon hunter crossbow",
+          "img": "Dragon_hunter_crossbow.png"
+        },
+        {
+          "name": "Ancestral hat",
+          "img": "Ancestral_hat.png"
+        },
+        {
+          "name": "Ancestral robe top",
+          "img": "Ancestral_robe_top.png"
+        },
+        {
+          "name": "Ancestral robe bottom",
+          "img": "Ancestral_robe_bottom.png"
+        },
+        {
+          "name": "Dinh's bulwark",
+          "img": "Dinh%27s_bulwark.png"
+        },
+        {
+          "name": "Dragon claws",
+          "img": "Dragon_claws.png"
+        },
+        {
+          "name": "Elder maul",
+          "img": "Elder_maul.png"
+        },
+        {
+          "name": "Kodai insignia",
+          "img": "Kodai_insignia.png"
+        },
+        {
+          "name": "Twisted bow",
+          "img": "Twisted_bow.png"
+        }
+      ]
+    }
+  }
+}

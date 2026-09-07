@@ -200,7 +200,8 @@ const BOSS_DATA = {
       { name: "Ballista limbs", rate: 500, value: 100000, img: "Ballista_limbs.png" },
       { name: "Ballista spring", rate: 500, value: 100000, img: "Ballista_spring.png" },
       { name: "Light frame", rate: 750, value: 50000, img: "Light_frame.png" },
-      { name: "Heavy frame", rate: 1500, value: 200000, img: "Heavy_frame.png" }
+      { name: "Heavy frame", rate: 1500, value: 200000, img: "Heavy_frame.png" },
+      { name: "Monkey tail", rate: 1500, value: 3000000, img: "Monkey_tail.png" }
     ]
   },
   yama: {
@@ -213,6 +214,36 @@ const BOSS_DATA = {
       { name: "Soulflame horn", rate: 300, value: 45000000, img: "Soulflame_horn.png" },
       { name: "Oathplate shards", rate: 15, value: 170000, img: "Oathplate_shards.png" },
       { name: "Yami", rate: 2500, value: 0, img: "Yami.png" }
+    ]
+  },
+  bluemoon: {
+    name: "Blue Moon", unitName: "Kills", keyItem: "Blue moon spear", type: "standard",
+    gear: "Melee (crush - Blue Moon er svak mot crush). 1/56 sjanse på et tilfeldig sett-stykke per kill (fordelt ~likt på 4 deler her). Sett gir Frostweaver-effekt (magic).",
+    drops: [
+      { name: "Blue moon helm", rate: 224, value: 2000000, img: "Blue_moon_helm.png" },
+      { name: "Blue moon spear", rate: 224, value: 3000000, img: "Blue_moon_spear.png" },
+      { name: "Blue moon robe top", rate: 224, value: 2000000, img: "Blue_moon_robe_top.png" },
+      { name: "Blue moon robe bottoms", rate: 224, value: 2000000, img: "Blue_moon_robe_bottoms.png" }
+    ]
+  },
+  eclipsemoon: {
+    name: "Eclipse Moon", unitName: "Kills", keyItem: "Eclipse atlatl", type: "standard",
+    gear: "Melee (stab - Eclipse Moon er svak mot stab). 1/56 sjanse på et tilfeldig sett-stykke per kill. Sett gir Eclipse-effekt (ranged burn).",
+    drops: [
+      { name: "Eclipse moon helm", rate: 224, value: 2000000, img: "Eclipse_moon_helm.png" },
+      { name: "Eclipse atlatl", rate: 224, value: 3000000, img: "Eclipse_atlatl.png" },
+      { name: "Eclipse moon chestplate", rate: 224, value: 2000000, img: "Eclipse_moon_chestplate.png" },
+      { name: "Eclipse moon tassets", rate: 224, value: 2000000, img: "Eclipse_moon_tassets.png" }
+    ]
+  },
+  bloodmoon: {
+    name: "Blood Moon", unitName: "Kills", keyItem: "Dual macuahuitl", type: "standard",
+    gear: "Melee (slash - Blood Moon er svak mot slash). 1/56 sjanse på et tilfeldig sett-stykke per kill. Sett gir Bloodrager-effekt (lifesteal).",
+    drops: [
+      { name: "Blood moon helm", rate: 224, value: 2000000, img: "Blood_moon_helm.png" },
+      { name: "Dual macuahuitl", rate: 224, value: 3000000, img: "Dual_macuahuitl.png" },
+      { name: "Blood moon chestplate", rate: 224, value: 2000000, img: "Blood_moon_chestplate.png" },
+      { name: "Blood moon tassets", rate: 224, value: 2000000, img: "Blood_moon_tassets.png" }
     ]
   },
   shaman: {

@@ -225,6 +225,31 @@ body {
 .comment-line { background: var(--bg-panel-2); border-radius: 6px; padding: 5px 8px; margin-bottom: 4px; font-size: 12.5px; }
 .comment-line b { color: var(--accent); }
 
+/* ---------- Bank + Collection Log ---------- */
+.bank-slot, .collog-slot {
+  position: relative;
+  background: #0b0d10;
+  border: 1px solid #2c333f;
+  border-radius: 6px;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bank-slot img, .collog-slot img { max-width: 32px; max-height: 32px; }
+.bank-remove {
+  position: absolute; top: -4px; right: -4px; width: 16px; height: 16px;
+  border-radius: 50%; background: #c0392b; color: #fff; border: none;
+  font-size: 10px; line-height: 1; cursor: pointer;
+}
+.collog-slot.has-item { border-color: #4caf50; background: rgba(76,175,80,0.12); }
+.collog-slot.has-item img { filter: none; }
+.collog-slot.missing-item img { filter: grayscale(1) brightness(0.4); opacity: 0.6; }
+.collog-slot.missing-item { border-color: #c0392b44; }
+.collog-slot.clickable { cursor: pointer; transition: transform .1s ease; }
+.collog-slot.clickable:hover { transform: scale(1.08); border-color: var(--accent); }
+
+
 
 
 /* misc */

@@ -193,6 +193,30 @@
         "img": "Oathplate_helm.png",
         "style": "melee",
         "tier": 10
+      },
+      {
+        "name": "Masori mask",
+        "img": "Masori_mask.png",
+        "style": "range",
+        "tier": 8
+      },
+      {
+        "name": "Blue moon helm",
+        "img": "Blue_moon_helm.png",
+        "style": "magic",
+        "tier": 6
+      },
+      {
+        "name": "Eclipse moon helm",
+        "img": "Eclipse_moon_helm.png",
+        "style": "range",
+        "tier": 6
+      },
+      {
+        "name": "Blood moon helm",
+        "img": "Blood_moon_helm.png",
+        "style": "melee",
+        "tier": 6
       }
     ],
     "cape": [
@@ -845,6 +869,30 @@
         "tier": 5,
         "attackType": "magic",
         "speed": 5
+      },
+      {
+        "name": "Blue moon spear",
+        "img": "Blue_moon_spear.png",
+        "style": "melee",
+        "tier": 6,
+        "attackType": "stab",
+        "speed": 5
+      },
+      {
+        "name": "Eclipse atlatl",
+        "img": "Eclipse_atlatl.png",
+        "style": "range",
+        "tier": 6,
+        "attackType": "range",
+        "speed": 4
+      },
+      {
+        "name": "Dual macuahuitl",
+        "img": "Dual_macuahuitl.png",
+        "style": "melee",
+        "tier": 6,
+        "attackType": "slash",
+        "speed": 4
       }
     ],
     "shield": [
@@ -1095,6 +1143,30 @@
         "img": "Oathplate_chest.png",
         "style": "melee",
         "tier": 10
+      },
+      {
+        "name": "Masori body",
+        "img": "Masori_body.png",
+        "style": "range",
+        "tier": 8
+      },
+      {
+        "name": "Blue moon robe top",
+        "img": "Blue_moon_robe_top.png",
+        "style": "magic",
+        "tier": 6
+      },
+      {
+        "name": "Eclipse moon chestplate",
+        "img": "Eclipse_moon_chestplate.png",
+        "style": "range",
+        "tier": 6
+      },
+      {
+        "name": "Blood moon chestplate",
+        "img": "Blood_moon_chestplate.png",
+        "style": "melee",
+        "tier": 6
       }
     ],
     "legs": [
@@ -1247,6 +1319,30 @@
         "img": "Oathplate_legs.png",
         "style": "melee",
         "tier": 10
+      },
+      {
+        "name": "Masori chaps",
+        "img": "Masori_chaps.png",
+        "style": "range",
+        "tier": 8
+      },
+      {
+        "name": "Blue moon robe bottoms",
+        "img": "Blue_moon_robe_bottoms.png",
+        "style": "magic",
+        "tier": 6
+      },
+      {
+        "name": "Eclipse moon tassets",
+        "img": "Eclipse_moon_tassets.png",
+        "style": "range",
+        "tier": 6
+      },
+      {
+        "name": "Blood moon tassets",
+        "img": "Blood_moon_tassets.png",
+        "style": "melee",
+        "tier": 6
       }
     ],
     "hands": [

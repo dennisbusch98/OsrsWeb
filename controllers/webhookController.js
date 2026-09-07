@@ -23,6 +23,7 @@ const path = require('path');
 const fs = require('fs');
 const { v4: uuid } = require('uuid');
 const postService = require('../services/postService');
+const bankService = require('../services/bankService');
 const { Character } = require('../models');
 
 const uploadDir = path.join(__dirname, '..', 'public', 'uploads', 'loot');
@@ -76,6 +77,22 @@ function extractIconFromPayload(payload) {
   const embed = payload && payload.embeds && payload.embeds[0];
   if (!embed) return null;
   return (embed.thumbnail && embed.thumbnail.url) || (embed.image && embed.image.url) || null;
+}
+
+// Extracts the item name from a collection log unlock notification, e.g.
+// the standard OSRS chat message "New item added to your collection log: X"
+// (most collection-log webhook plugins - including Better Discord Loot
+// Logger - forward this verbatim, or a close variant of it).
+function extractCollectionLogItem(content) {
+  const patterns = [
+    /new item added to your collection log:\s*([A-Za-z0-9' -]+?)(?:\.|$)/i,
+    /collection log:\s*([A-Za-z0-9' -]+?)(?:\s*\(new\)|\.|$)/i
+  ];
+  for (const re of patterns) {
+    const m = content.match(re);
+    if (m && m[1]) return m[1].trim();
+  }
+  return null;
 }
 
 // Tries to pull an item/skill name out of common RuneLite notification
@@ -151,6 +168,15 @@ const receiveWebhookEvent = [
 
       const classification = classify(content);
       const { emoji, label } = classification;
+
+      // If this looks like a collection log unlock, auto-add the item to
+      // this character's Bank so the Collection Log tabs light up green
+      // without anyone having to type it in manually.
+      const clogItem = extractCollectionLogItem(content);
+      if (clogItem) {
+        try { await bankService.addItem(character.id, clogItem); }
+        catch (e) { console.log(`[webhook:event] could not auto-add "${clogItem}" to bank:`, e.message); }
+      }
 
       // Icon priority: 1) screenshot RuneLite attached, 2) icon URL from the
       // Discord embed itself, 3) explicit imageUrl in a custom JSON body,

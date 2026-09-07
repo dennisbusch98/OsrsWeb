@@ -10,6 +10,7 @@ const Post = require('./Post');
 const Event = require('./Event');
 const PostLike = require('./PostLike');
 const Comment = require('./Comment');
+const BankItem = require('./BankItem');
 
 // Character <-> User (one character has at most one owner/player)
 Character.hasOne(User, { foreignKey: 'characterId', as: 'owner' });
@@ -18,6 +19,10 @@ User.belongsTo(Character, { foreignKey: 'characterId', as: 'character' });
 // Character -> GearSlot (one character has many gear slot rows, 11 per style)
 Character.hasMany(GearSlot, { foreignKey: 'characterId', as: 'gearSlots' });
 GearSlot.belongsTo(Character, { foreignKey: 'characterId' });
+
+// Character -> BankItem (manually maintained "I own this" list)
+Character.hasMany(BankItem, { foreignKey: 'characterId', as: 'bankItems' });
+BankItem.belongsTo(Character, { foreignKey: 'characterId' });
 
 // Post -> author (User) and optionally the character it was posted as
 User.hasMany(Post, { foreignKey: 'authorId', as: 'posts' });
@@ -40,4 +45,4 @@ Comment.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
 User.hasMany(Event, { foreignKey: 'createdBy', as: 'events' });
 Event.belongsTo(User, { foreignKey: 'createdBy', as: 'creator' });
 
-module.exports = { sequelize, User, Character, GearSlot, Post, Event, PostLike, Comment };
+module.exports = { sequelize, User, Character, GearSlot, Post, Event, PostLike, Comment, BankItem };

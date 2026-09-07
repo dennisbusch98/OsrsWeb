@@ -156,6 +156,19 @@ function renderCharacterContent() {
           <div id="achievementsPanel" style="max-height: 320px; overflow-y:auto;"></div>
         </div>
       </div>
+
+      <div class="col-12">
+        <div class="panel p-3">
+          <div class="d-flex justify-content-between align-items-center mb-2 flex-wrap gap-2">
+            <div class="btn-group btn-group-sm" id="extraTabs">
+              <button class="btn btn-noob" data-extra-tab="bank">🏦 Bank</button>
+              <button class="btn btn-outline-light" data-extra-tab="collection">📖 Collection Log</button>
+            </div>
+            <div id="collectionSetTabs" class="btn-group btn-group-sm" style="display:none;"></div>
+          </div>
+          <div id="extraTabContent"></div>
+        </div>
+      </div>
     </div>
   `;
 
@@ -163,7 +176,253 @@ function renderCharacterContent() {
   renderStats();
   renderBossCounts();
   renderAchievements();
+  initExtraTabs(isOwner);
 }
+
+let BANK_ITEMS = [];
+let COLLECTION_CATALOG = null;
+let ACTIVE_EXTRA_TAB = 'bank';
+let ACTIVE_COLLECTION_SET = 'barrows';
+
+function flatItemPool() {
+  // Every item across every slot in the gear catalog, deduped by name -
+  // used as the searchable "add to bank" list, since collection log items
+  // are equipment pieces we already track there anyway.
+  const seen = new Map();
+  GEAR_CATALOG.slots.forEach(slot => {
+    (GEAR_CATALOG.items[slot] || []).forEach(item => {
+      if (item.name && !seen.has(item.name)) seen.set(item.name, item);
+    });
+  });
+  return [...seen.values()];
+}
+
+let EXTRA_IS_OWNER = false;
+
+async function initExtraTabs(isOwner) {
+  EXTRA_IS_OWNER = isOwner;
+  if (!COLLECTION_CATALOG) {
+    COLLECTION_CATALOG = await Api.get('/api/characters/collection-catalog');
+  }
+  document.querySelectorAll('#extraTabs button').forEach(btn => {
+    btn.addEventListener('click', () => switchExtraTab(btn.dataset.extraTab));
+  });
+  await loadBank();
+  switchExtraTab(ACTIVE_EXTRA_TAB);
+}
+
+async function loadBank() {
+  BANK_ITEMS = await Api.get(`/api/characters/${ACTIVE_CHAR.id}/bank`);
+}
+
+function switchExtraTab(tab) {
+  ACTIVE_EXTRA_TAB = tab;
+  document.querySelectorAll('#extraTabs button').forEach(b => {
+    b.classList.toggle('btn-noob', b.dataset.extraTab === tab);
+    b.classList.toggle('btn-outline-light', b.dataset.extraTab !== tab);
+  });
+  document.getElementById('collectionSetTabs').style.display = tab === 'collection' ? 'flex' : 'none';
+  if (tab === 'bank') {
+    renderBank(EXTRA_IS_OWNER);
+  } else {
+    renderCollectionSetDropdown();
+    renderCollectionLog();
+  }
+}
+
+// ===== Bank =====
+function bankItemImg(name) {
+  const item = flatItemPool().find(o => o.name === name);
+  return item ? itemImgUrl(item.img) : '';
+}
+
+function renderBank(isOwner) {
+  const content = document.getElementById('extraTabContent');
+  content.innerHTML = `
+    ${isOwner ? `
+      <div class="mb-2">
+        <div class="d-flex gap-2 mb-2">
+          <input type="text" class="form-control form-control-sm" id="bankSearch" placeholder="Søk etter item å legge i banken...">
+          <button class="btn btn-outline-light btn-sm" onclick="document.getElementById('clogImportFile').click()">📥 Importer collection log</button>
+          <input type="file" id="clogImportFile" accept=".json" style="display:none;">
+        </div>
+        <div id="bankImportMsg" class="mb-1"></div>
+        <div id="bankSearchResults" class="gear-item-picker" style="max-height:180px; display:none;"></div>
+      </div>
+    ` : ''}
+    <div class="row row-cols-4 row-cols-md-6 g-2" id="bankGrid"></div>
+  `;
+
+  const grid = document.getElementById('bankGrid');
+  if (BANK_ITEMS.length === 0) {
+    grid.innerHTML = '<p class="text-secondary" style="font-size:12px;">Ingen items i banken enda.</p>';
+  } else {
+    grid.innerHTML = BANK_ITEMS.map(name => `
+      <div class="col">
+        <div class="bank-slot" title="${name}">
+          <img src="${bankItemImg(name)}" onerror="this.style.opacity=0.2">
+          ${isOwner ? `<button class="bank-remove" data-remove-item="${name}" title="Fjern">×</button>` : ''}
+        </div>
+      </div>
+    `).join('');
+    if (isOwner) {
+      grid.querySelectorAll('[data-remove-item]').forEach(el => {
+        el.addEventListener('click', () => removeBankItem(el.dataset.removeItem));
+      });
+    }
+  }
+
+  if (isOwner) {
+    const searchInput = document.getElementById('bankSearch');
+    const resultsBox = document.getElementById('bankSearchResults');
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.trim().toLowerCase();
+      if (!term) { resultsBox.style.display = 'none'; return; }
+      const matches = flatItemPool().filter(o => o.name.toLowerCase().includes(term)).slice(0, 30);
+      resultsBox.style.display = 'block';
+      resultsBox.innerHTML = matches.map(o => `
+        <div class="gear-item-option" data-add-item="${o.name}">
+          <img src="${itemImgUrl(o.img)}" onerror="this.style.opacity=0.2">
+          <span>${o.name}</span>
+        </div>
+      `).join('') || '<p class="text-secondary" style="font-size:12px;">Ingen treff.</p>';
+      resultsBox.querySelectorAll('[data-add-item]').forEach(el => {
+        el.addEventListener('click', () => addBankItem(el.dataset.addItem));
+      });
+    });
+
+    document.getElementById('clogImportFile').addEventListener('change', handleClogImport);
+  }
+}
+
+async function addBankItem(itemName) {
+  try {
+    BANK_ITEMS = await Api.post(`/api/characters/${ACTIVE_CHAR.id}/bank`, { itemName });
+    document.getElementById('bankSearch').value = '';
+    document.getElementById('bankSearchResults').style.display = 'none';
+    renderBank(true);
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+async function removeBankItem(itemName) {
+  try {
+    BANK_ITEMS = await Api.del(`/api/characters/${ACTIVE_CHAR.id}/bank/${encodeURIComponent(itemName)}`);
+    renderBank(true);
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+// Best-effort parser: RuneLite collection log export plugins don't have a
+// single documented/official JSON schema, so this walks the WHOLE file
+// recursively and treats any object with a "name" (or "itemName") field
+// plus an "obtained: true" (or a positive "quantity"/"count") as an
+// obtained item. Works across several plugin variants without needing to
+// hardcode one exact shape - but if your export looks very different,
+// tell us what it looks like and we'll adjust this.
+function extractObtainedItemNames(json) {
+  const found = new Set();
+  function walk(node) {
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node)) { node.forEach(walk); return; }
+    const name = node.name || node.itemName;
+    const obtainedFlag = node.obtained === true;
+    const qty = Number(node.quantity ?? node.count ?? 0);
+    if (typeof name === 'string' && (obtainedFlag || qty > 0)) {
+      found.add(name.trim());
+    }
+    Object.values(node).forEach(walk);
+  }
+  walk(json);
+  return [...found];
+}
+
+function handleClogImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const msg = document.getElementById('bankImportMsg');
+  const reader = new FileReader();
+  reader.onload = async (ev) => {
+    try {
+      const json = JSON.parse(ev.target.result);
+      const names = extractObtainedItemNames(json);
+      if (names.length === 0) {
+        msg.innerHTML = '<div class="alert alert-warning py-1 px-2" style="font-size:12px;">Fant ingen "obtained"-items i filen - formatet stemte trolig ikke med det vi forventet. Si ifra så justerer vi parseren.</div>';
+        return;
+      }
+      msg.innerHTML = `<div class="alert alert-secondary py-1 px-2" style="font-size:12px;">Importerer ${names.length} items...</div>`;
+      BANK_ITEMS = await Api.post(`/api/characters/${ACTIVE_CHAR.id}/bank/import`, { itemNames: names });
+      msg.innerHTML = `<div class="alert alert-success py-1 px-2" style="font-size:12px;">Importerte ${names.length} items fra collection log-eksporten!</div>`;
+      renderBank(true);
+    } catch (err) {
+      msg.innerHTML = `<div class="alert alert-danger py-1 px-2" style="font-size:12px;">Klarte ikke å lese filen: ${err.message}</div>`;
+    }
+  };
+  reader.readAsText(file);
+}
+
+// ===== Collection Log =====
+function renderCollectionSetDropdown() {
+  const container = document.getElementById('collectionSetTabs');
+  const sets = COLLECTION_CATALOG.sets;
+  container.innerHTML = `
+    <select class="form-select form-select-sm" id="collectionSetSelect" style="min-width:180px;">
+      ${Object.keys(sets).map(key => `<option value="${key}" ${key === ACTIVE_COLLECTION_SET ? 'selected' : ''}>${sets[key].label}</option>`).join('')}
+    </select>
+  `;
+  document.getElementById('collectionSetSelect').addEventListener('change', (e) => {
+    ACTIVE_COLLECTION_SET = e.target.value;
+    renderCollectionLog();
+  });
+}
+
+function renderCollectionLog() {
+  const content = document.getElementById('extraTabContent');
+  const set = COLLECTION_CATALOG.sets[ACTIVE_COLLECTION_SET];
+  if (!set) { content.innerHTML = ''; return; }
+
+  const owned = set.items.filter(i => BANK_ITEMS.includes(i.name)).length;
+  content.innerHTML = `
+    <div class="text-secondary mb-2" style="font-size:12px;">
+      ${owned} / ${set.items.length} skaffet
+      ${EXTRA_IS_OWNER ? ' · klikk et item for å markere/fjerne det manuelt' : ''}
+    </div>
+    <div class="row row-cols-4 row-cols-md-6 g-2">
+      ${set.items.map(i => {
+        const has = BANK_ITEMS.includes(i.name);
+        return `
+          <div class="col">
+            <div class="collog-slot ${has ? 'has-item' : 'missing-item'} ${EXTRA_IS_OWNER ? 'clickable' : ''}" title="${i.name}${has ? ' ✔' : ''}" data-clog-item="${i.name}">
+              <img src="${IMG_BASE}${i.img}" onerror="this.style.opacity=0.3">
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+
+  if (EXTRA_IS_OWNER) {
+    content.querySelectorAll('[data-clog-item]').forEach(el => {
+      el.addEventListener('click', () => toggleClogItem(el.dataset.clogItem));
+    });
+  }
+}
+
+async function toggleClogItem(itemName) {
+  try {
+    if (BANK_ITEMS.includes(itemName)) {
+      BANK_ITEMS = await Api.del(`/api/characters/${ACTIVE_CHAR.id}/bank/${encodeURIComponent(itemName)}`);
+    } else {
+      BANK_ITEMS = await Api.post(`/api/characters/${ACTIVE_CHAR.id}/bank`, { itemName });
+    }
+    renderCollectionLog();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
 
 function achTimeAgo(iso) {
   const diffMs = Date.now() - new Date(iso).getTime();
